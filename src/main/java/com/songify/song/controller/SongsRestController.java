@@ -1,5 +1,7 @@
-package com.songify.song;
+package com.songify.song.controller;
 
+import com.songify.song.dto.*;
+import com.songify.song.error.SongNotFoundException;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -26,7 +28,8 @@ public class SongsRestController {
     @GetMapping("songs")
     public ResponseEntity<SongResponseDto> getAllSongs(@RequestParam(required = false) Integer limit) {
         if (limit != null) {
-            Map<Integer, String> limitedMap = database.entrySet().stream()
+            Map<Integer, String> limitedMap = database.entrySet()
+                                                      .stream()
                                                       .limit(limit)
                                                       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             return ResponseEntity.ok(new SongResponseDto(limitedMap));
@@ -39,11 +42,10 @@ public class SongsRestController {
     public ResponseEntity<SingleSongResponseDto> getSongByID(@PathVariable Integer id,
                                                              @RequestHeader(required = false) String requestId) {
         log.info("requestId: {}", requestId);
-        String song = database.get(id);
-        if (song == null) {
-            return ResponseEntity.notFound().build();
+        if (!database.containsKey(id)) {
+            throw new SongNotFoundException("cannot find song with id " + id);
         }
-        SingleSongResponseDto responseDto = new SingleSongResponseDto(song);
+        SingleSongResponseDto responseDto = new SingleSongResponseDto(database.get(id));
         return ResponseEntity.ok(responseDto);
     }
     
@@ -57,6 +59,9 @@ public class SongsRestController {
     
     @DeleteMapping("songs/{id}")
     public ResponseEntity<DeleteSongResponseDto> deleteSongById(@PathVariable Integer id) {
+        if (!database.containsKey(id)) {
+            throw new SongNotFoundException("cannot find song with id " + id);
+        }
         database.remove(id);
         return ResponseEntity.ok(new DeleteSongResponseDto("you deleted song by id: " + id, HttpStatus.OK));
     }
