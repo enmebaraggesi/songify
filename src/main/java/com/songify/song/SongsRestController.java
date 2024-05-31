@@ -1,4 +1,4 @@
-package com.songify;
+package com.songify.song;
 
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 
 @Log4j2
 @RestController
-public class SongsController {
+public class SongsRestController {
     
     Map<Integer, String> database = new HashMap<>();
     
-    public SongsController() {
+    public SongsRestController() {
         database.put(1, "abc");
         database.put(2, "def");
         database.put(3, "ghi");
