@@ -2,6 +2,7 @@ package com.songify.song;
 
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,5 +53,11 @@ public class SongsRestController {
         log.info("adding new song: {}", songName);
         database.put(database.size() + 1, songName);
         return ResponseEntity.ok(new SingleSongResponseDto(songName));
+    }
+    
+    @DeleteMapping("songs/{id}")
+    public ResponseEntity<DeleteSongResponseDto> deleteSongById(@PathVariable Integer id) {
+        database.remove(id);
+        return ResponseEntity.ok(new DeleteSongResponseDto("you deleted song by id: " + id, HttpStatus.OK));
     }
 }
