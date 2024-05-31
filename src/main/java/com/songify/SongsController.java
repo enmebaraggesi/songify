@@ -44,4 +44,12 @@ public class SongsController {
         SingleSongResponseDto responseDto = new SingleSongResponseDto(song);
         return ResponseEntity.ok(responseDto);
     }
+    
+    @PostMapping("songs")
+    public ResponseEntity<SingleSongResponseDto> postSong(@RequestBody SongRequestDto songRequest) {
+        String songName = songRequest.songName();
+        log.info("adding new song: {}", songName);
+        database.put(database.size() + 1, songName);
+        return ResponseEntity.ok(new SingleSongResponseDto(songName));
+    }
 }
