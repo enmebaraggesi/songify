@@ -1,6 +1,8 @@
 package com.songify.song.controller;
 
-import com.songify.song.dto.*;
+import com.songify.song.dto.request.SongRequestDto;
+import com.songify.song.dto.request.UpdateSongRequestDto;
+import com.songify.song.dto.response.*;
 import com.songify.song.error.SongNotFoundException;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
@@ -16,19 +18,19 @@ import java.util.stream.Collectors;
 @RestController
 public class SongsRestController {
     
-    Map<Integer, String> database = new HashMap<>();
+    Map<Integer, Song> database = new HashMap<>();
     
     public SongsRestController() {
-        database.put(1, "abc");
-        database.put(2, "def");
-        database.put(3, "ghi");
-        database.put(4, "jkl");
+        database.put(1, new Song("abc", "cba"));
+        database.put(2, new Song("def", "fed"));
+        database.put(3, new Song("ghi", "ihg"));
+        database.put(4, new Song("jkl", "lkj"));
     }
     
     @GetMapping("songs")
     public ResponseEntity<SongResponseDto> getAllSongs(@RequestParam(required = false) Integer limit) {
         if (limit != null) {
-            Map<Integer, String> limitedMap = database.entrySet()
+            Map<Integer, Song> limitedMap = database.entrySet()
                                                       .stream()
                                                       .limit(limit)
                                                       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -51,10 +53,10 @@ public class SongsRestController {
     
     @PostMapping("songs")
     public ResponseEntity<SingleSongResponseDto> postSong(@RequestBody @Valid SongRequestDto songRequest) {
-        String songName = songRequest.songName();
-        log.info("adding new song: {}", songName);
-        database.put(database.size() + 1, songName);
-        return ResponseEntity.ok(new SingleSongResponseDto(songName));
+        Song song = new Song(songRequest.songName(), songRequest.artist());
+        log.info("adding new song: {}", song);
+        database.put(database.size() + 1, song);
+        return ResponseEntity.ok(new SingleSongResponseDto(song));
     }
     
     @DeleteMapping("songs/{id}")
@@ -64,5 +66,17 @@ public class SongsRestController {
         }
         database.remove(id);
         return ResponseEntity.ok(new DeleteSongResponseDto("you deleted song by id: " + id, HttpStatus.OK));
+    }
+    
+    @PutMapping("songs/{id}")
+    public ResponseEntity<UpdateSongResponseDto> updateSongById(@PathVariable Integer id,
+                                                                @RequestBody @Valid UpdateSongRequestDto songRequest) {
+        if (!database.containsKey(id)) {
+            throw new SongNotFoundException("cannot find song with id " + id);
+        }
+        Song newSong = new Song(songRequest.songName(), songRequest.artist());
+        Song oldSong = database.put(id, newSong);
+        log.info("updating song id: {}, {}, with new: {}", id, oldSong, newSong);
+        return ResponseEntity.ok(new UpdateSongResponseDto(newSong.name(), newSong.artist()));
     }
 }
