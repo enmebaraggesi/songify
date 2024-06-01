@@ -1,7 +1,6 @@
 package com.songify.song.controller;
 
-import com.songify.song.dto.request.SongRequestDto;
-import com.songify.song.dto.request.UpdateSongRequestDto;
+import com.songify.song.dto.request.*;
 import com.songify.song.dto.response.*;
 import com.songify.song.error.SongNotFoundException;
 import jakarta.validation.Valid;
@@ -31,9 +30,9 @@ public class SongsRestController {
     public ResponseEntity<SongResponseDto> getAllSongs(@RequestParam(required = false) Integer limit) {
         if (limit != null) {
             Map<Integer, Song> limitedMap = database.entrySet()
-                                                      .stream()
-                                                      .limit(limit)
-                                                      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                                                    .stream()
+                                                    .limit(limit)
+                                                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             return ResponseEntity.ok(new SongResponseDto(limitedMap));
         }
         SongResponseDto responseDto = new SongResponseDto(database);
@@ -78,5 +77,30 @@ public class SongsRestController {
         Song oldSong = database.put(id, newSong);
         log.info("updating song id: {}, {}, with new: {}", id, oldSong, newSong);
         return ResponseEntity.ok(new UpdateSongResponseDto(newSong.name(), newSong.artist()));
+    }
+    
+    @PatchMapping("songs/{id}")
+    public ResponseEntity<PatchSongResponseDto> patchSongById(@PathVariable Integer id,
+                                                              @RequestBody PatchSongRequestDto songRequest) {
+        if (!database.containsKey(id)) {
+            throw new SongNotFoundException("cannot find song with id " + id);
+        }
+        Song songFromDatabase = database.get(id);
+        Song.SongBuilder builder = Song.builder();
+        if (songRequest.songName() != null) {
+            builder.name(songRequest.songName());
+            log.info("patched song id: {}, with new name: {}", id, songRequest.songName());
+        } else {
+            builder.name(songFromDatabase.name());
+        }
+        if (songRequest.artist() != null) {
+            builder.artist(songRequest.artist());
+            log.info("patched song id: {}, with new artist: {}", id, songRequest.artist());
+        } else {
+            builder.artist(songFromDatabase.artist());
+        }
+        Song newSong = builder.build();
+        database.put(id, newSong);
+        return ResponseEntity.ok(new PatchSongResponseDto("updated song"));
     }
 }
