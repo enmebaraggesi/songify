@@ -1,9 +1,9 @@
-package com.songify.song.dto.request;
+package com.songify.song.controller.dto.request;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-public record UpdateSongRequestDto(
+public record PostSongRequestDto(
         @NotNull(message = "songName must not be null")
         @NotEmpty(message = "songName must not be empty")
         String songName,
@@ -12,5 +12,5 @@ public record UpdateSongRequestDto(
         @NotEmpty(message = "artist must not be empty")
         String artist
 ) {
-    
+
 }
