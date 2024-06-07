@@ -5,7 +5,7 @@ import com.songify.song.controller.dto.response.*;
 import com.songify.song.model.Song;
 import org.springframework.http.HttpStatus;
 
-import java.util.Map;
+import java.util.List;
 
 public class SongMapper {
     
@@ -17,7 +17,7 @@ public class SongMapper {
         return new PostSongResponseDto(song);
     }
     
-    public static GetAllSongsResponseDto mapCollectionToGetAllSongsResponseDto(Map<Integer, Song> collection) {
+    public static GetAllSongsResponseDto mapCollectionToGetAllSongsResponseDto(List<Song> collection) {
         return new GetAllSongsResponseDto(collection);
     }
     
