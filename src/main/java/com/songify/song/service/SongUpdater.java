@@ -25,6 +25,15 @@ public class SongUpdater {
         songRepository.updateById(id, song);
     }
     
+//    DIRTY CHECKING METHOD - using setters over entity and @Transactional
+
+//    public void updateById(Long id, Song song) {
+//        log.info("Updating song by id: {}", song.getId());
+//        Song songById = songRetriever.findSongById(id);
+//        songById.setName(song.getName());
+//        songById.setArtist(song.getArtist());
+//    }
+    
     public Song updatePartiallyById(Long id, Song updatedSong) {
         Song songById = songRetriever.findSongById(id);
         Song.SongBuilder builder = Song.builder();
@@ -44,4 +53,19 @@ public class SongUpdater {
         updateById(id, newSong);
         return newSong;
     }
+    
+//    DIRTY CHECKING METHOD - using setters over entity and @Transactional
+
+//    public Song updatePartiallyById(Long id, Song updatedSong) {
+//        Song songById = songRetriever.findSongById(id);
+//        if (updatedSong.getName() != null) {
+//            songById.setName(updatedSong.getName());
+//            log.info("patched song id: {}, with new name: {}", id, updatedSong.getName());
+//        }
+//        if (updatedSong.getArtist() != null) {
+//            songById.setArtist(updatedSong.getArtist());
+//            log.info("patched song id: {}, with new artist: {}", id, updatedSong.getArtist());
+//        }
+//        return updatedSong;
+//    }
 }
