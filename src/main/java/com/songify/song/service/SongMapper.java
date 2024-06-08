@@ -30,7 +30,7 @@ public class SongMapper {
     }
     
     public static UpdateSongResponseDto mapSongToUpdateSongResponseDto(Song song) {
-        return new UpdateSongResponseDto(song.name(), song.artist());
+        return new UpdateSongResponseDto(song.getName(), song.getArtist());
     }
     
     public static DeleteSongResponseDto mapSongIdToDeleteSongResponseDto(Integer id) {

@@ -87,16 +87,16 @@ public class SongsRestController {
         Song updatedSong = SongMapper.mapFromPatchSongRequestDtoToSong(dto);
         Song.SongBuilder builder = Song.builder();
         if (dto.songName() != null) {
-            builder.name(updatedSong.name());
-            log.info("patched song id: {}, with new name: {}", id, updatedSong.name());
+            builder.name(updatedSong.getName());
+            log.info("patched song id: {}, with new name: {}", id, updatedSong.getName());
         } else {
-            builder.name(songFromDatabase.name());
+            builder.name(songFromDatabase.getName());
         }
         if (dto.artist() != null) {
-            builder.artist(updatedSong.artist());
-            log.info("patched song id: {}, with new artist: {}", id, updatedSong.artist());
+            builder.artist(updatedSong.getArtist());
+            log.info("patched song id: {}, with new artist: {}", id, updatedSong.getArtist());
         } else {
-            builder.artist(songFromDatabase.artist());
+            builder.artist(songFromDatabase.getArtist());
         }
         Song newSong = builder.build();
         songAdder.addSong(newSong);
