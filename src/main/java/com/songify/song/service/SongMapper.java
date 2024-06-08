@@ -33,7 +33,7 @@ public class SongMapper {
         return new UpdateSongResponseDto(song.getName(), song.getArtist());
     }
     
-    public static DeleteSongResponseDto mapSongIdToDeleteSongResponseDto(Integer id) {
+    public static DeleteSongResponseDto mapSongIdToDeleteSongResponseDto(Long id) {
         return new DeleteSongResponseDto("you deleted song by id: " + id, HttpStatus.OK);
     }
     
