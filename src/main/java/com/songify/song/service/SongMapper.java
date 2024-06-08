@@ -41,7 +41,7 @@ public class SongMapper {
         return new Song(dto.songName(), dto.artist());
     }
     
-    public static PatchSongResponseDto mapPatchSongResponseDto() {
-        return new PatchSongResponseDto("updated song");
+    public static PatchSongResponseDto mapPatchSongResponseDto(Song song) {
+        return new PatchSongResponseDto("updated song " + song.getName() + " by " + song.getArtist());
     }
 }

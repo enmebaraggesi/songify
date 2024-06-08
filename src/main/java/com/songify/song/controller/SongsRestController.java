@@ -2,7 +2,6 @@ package com.songify.song.controller;
 
 import com.songify.song.controller.dto.request.*;
 import com.songify.song.controller.dto.response.*;
-import com.songify.song.error.SongNotFoundException;
 import com.songify.song.model.Song;
 import com.songify.song.service.*;
 import jakarta.validation.Valid;
@@ -37,8 +36,7 @@ public class SongsRestController {
     public ResponseEntity<GetSongResponseDto> getSongByID(@PathVariable Long id,
                                                           @RequestHeader(required = false) String requestId) {
         log.info("requestId: {}", requestId);
-        Song song = songRetriever.findSongById(id)
-                                 .orElseThrow(() -> new SongNotFoundException("cannot find song with id " + id));
+        Song song = songRetriever.findSongById(id);
         return ResponseEntity.ok(SongMapper.mapSongToGetSongResponseDto(song));
     }
     
@@ -51,7 +49,6 @@ public class SongsRestController {
     
     @DeleteMapping("{id}")
     public ResponseEntity<DeleteSongResponseDto> deleteSongById(@PathVariable Long id) {
-        songRetriever.existsById(id);
         songDeleter.deleteById(id);
         return ResponseEntity.ok(SongMapper.mapSongIdToDeleteSongResponseDto(id));
     }
@@ -59,37 +56,17 @@ public class SongsRestController {
     @PutMapping("{id}")
     public ResponseEntity<UpdateSongResponseDto> updateSongById(@PathVariable Long id,
                                                                 @RequestBody @Valid UpdateSongRequestDto dto) {
-        songRetriever.existsById(id);
         Song newSong = SongMapper.mapUpdateSongRequestDtoToSong(dto);
-        songUpdater.updateSong(id, newSong);
+        songUpdater.updateById(id, newSong);
         log.info("updating song id: {}, with: {}", id, newSong);
         return ResponseEntity.ok(SongMapper.mapSongToUpdateSongResponseDto(newSong));
     }
     
     @PatchMapping("{id}")
-    public ResponseEntity<PatchSongResponseDto> patchSongById(@PathVariable Integer id,
+    public ResponseEntity<PatchSongResponseDto> patchSongById(@PathVariable Long id,
                                                               @RequestBody PatchSongRequestDto dto) {
-        List<Song> allSongs = songRetriever.findAll();
-        if (!allSongs.contains(id)) {
-            throw new SongNotFoundException("cannot find song with id " + id);
-        }
-        Song songFromDatabase = allSongs.get(id);
         Song updatedSong = SongMapper.mapFromPatchSongRequestDtoToSong(dto);
-        Song.SongBuilder builder = Song.builder();
-        if (dto.songName() != null) {
-            builder.name(updatedSong.getName());
-            log.info("patched song id: {}, with new name: {}", id, updatedSong.getName());
-        } else {
-            builder.name(songFromDatabase.getName());
-        }
-        if (dto.artist() != null) {
-            builder.artist(updatedSong.getArtist());
-            log.info("patched song id: {}, with new artist: {}", id, updatedSong.getArtist());
-        } else {
-            builder.artist(songFromDatabase.getArtist());
-        }
-        Song newSong = builder.build();
-        songAdder.addSong(newSong);
-        return ResponseEntity.ok(SongMapper.mapPatchSongResponseDto());
+        Song updatePartiallyById = songUpdater.updatePartiallyById(id, updatedSong);
+        return ResponseEntity.ok(SongMapper.mapPatchSongResponseDto(updatePartiallyById));
     }
 }
