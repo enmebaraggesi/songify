@@ -19,10 +19,12 @@ public class SongsRestController {
     
     private final SongAdder songAdder;
     private final SongRetriever songRetriever;
+    private final SongDeleter songDeleter;
     
-    public SongsRestController(SongAdder songAdder, SongRetriever songRetriever) {
+    public SongsRestController(SongAdder songAdder, SongRetriever songRetriever, SongDeleter songDeleter) {
         this.songAdder = songAdder;
         this.songRetriever = songRetriever;
+        this.songDeleter = songDeleter;
     }
     
     @GetMapping
@@ -44,19 +46,16 @@ public class SongsRestController {
     }
     
     @PostMapping
-    public ResponseEntity<PostSongResponseDto> postSong(@RequestBody @Valid PostSongRequestDto dto) {
+    public ResponseEntity<PostSongResponseDto> addSong(@RequestBody @Valid PostSongRequestDto dto) {
         Song song = SongMapper.mapPostSongRequestDtoToSong(dto);
-        Song added = songAdder.addSong(song);
-        return ResponseEntity.ok(SongMapper.mapSongToPostSongResponseDto(added));
+        Song addedSong = songAdder.addSong(song);
+        return ResponseEntity.ok(SongMapper.mapSongToPostSongResponseDto(addedSong));
     }
     
     @DeleteMapping("{id}")
     public ResponseEntity<DeleteSongResponseDto> deleteSongById(@PathVariable Long id) {
-        List<Song> allSongs = songRetriever.findAll();
-        if (!allSongs.contains(id)) {
-            throw new SongNotFoundException("cannot find song with id " + id);
-        }
-        allSongs.remove(id);
+        songRetriever.existsById(id);
+        songDeleter.deleteById(id);
         return ResponseEntity.ok(SongMapper.mapSongIdToDeleteSongResponseDto(id));
     }
     

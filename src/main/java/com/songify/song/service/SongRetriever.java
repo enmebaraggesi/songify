@@ -1,5 +1,6 @@
 package com.songify.song.service;
 
+import com.songify.song.error.SongNotFoundException;
 import com.songify.song.model.Song;
 import com.songify.song.repository.SongRepository;
 import lombok.extern.log4j.Log4j2;
@@ -33,5 +34,9 @@ public class SongRetriever {
     
     public Optional<Song> findSongById(Long id) {
         return songRepository.findById(id);
+    }
+    
+    public void existsById(Long id) {
+        findSongById(id).orElseThrow(() -> new SongNotFoundException("cannot find song with id " + id));
     }
 }
