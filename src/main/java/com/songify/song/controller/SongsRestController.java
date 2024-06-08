@@ -6,6 +6,7 @@ import com.songify.song.error.SongNotFoundException;
 import com.songify.song.model.Song;
 import com.songify.song.service.*;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Log4j2
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("songs")
 public class SongsRestController {
@@ -20,12 +22,7 @@ public class SongsRestController {
     private final SongAdder songAdder;
     private final SongRetriever songRetriever;
     private final SongDeleter songDeleter;
-    
-    public SongsRestController(SongAdder songAdder, SongRetriever songRetriever, SongDeleter songDeleter) {
-        this.songAdder = songAdder;
-        this.songRetriever = songRetriever;
-        this.songDeleter = songDeleter;
-    }
+    private final SongUpdater songUpdater;
     
     @GetMapping
     public ResponseEntity<GetAllSongsResponseDto> getAllSongs(@RequestParam(required = false) Integer limit) {
@@ -60,15 +57,12 @@ public class SongsRestController {
     }
     
     @PutMapping("{id}")
-    public ResponseEntity<UpdateSongResponseDto> updateSongById(@PathVariable Integer id,
+    public ResponseEntity<UpdateSongResponseDto> updateSongById(@PathVariable Long id,
                                                                 @RequestBody @Valid UpdateSongRequestDto dto) {
-        List<Song> allSongs = songRetriever.findAll();
-        if (!allSongs.contains(id)) {
-            throw new SongNotFoundException("cannot find song with id " + id);
-        }
+        songRetriever.existsById(id);
         Song newSong = SongMapper.mapUpdateSongRequestDtoToSong(dto);
-        Song oldSong = songAdder.addSong(newSong);
-        log.info("updating song id: {}, {}, with new: {}", id, oldSong, newSong);
+        songUpdater.updateSong(id, newSong);
+        log.info("updating song id: {}, with: {}", id, newSong);
         return ResponseEntity.ok(SongMapper.mapSongToUpdateSongResponseDto(newSong));
     }
     
