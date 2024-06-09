@@ -9,20 +9,29 @@ import java.util.List;
 
 public class SongMapper {
     
+    public static SongDto mapSongToSongDto(Song song) {
+        return new SongDto(song.getId(), song.getName(), song.getArtist());
+    }
+    
     public static Song mapPostSongRequestDtoToSong(PostSongRequestDto dto) {
         return new Song(dto.songName(), dto.artist());
     }
     
     public static PostSongResponseDto mapSongToPostSongResponseDto(Song song) {
-        return new PostSongResponseDto(song);
+        SongDto songDto = mapSongToSongDto(song);
+        return new PostSongResponseDto(songDto);
     }
     
-    public static GetAllSongsResponseDto mapCollectionToGetAllSongsResponseDto(List<Song> collection) {
-        return new GetAllSongsResponseDto(collection);
+    public static GetAllSongsResponseDto mapCollectionToGetAllSongsResponseDto(List<Song> songs) {
+        List<SongDto> songDtos = songs.stream()
+                                      .map(SongMapper::mapSongToSongDto)
+                                      .toList();
+        return new GetAllSongsResponseDto(songDtos);
     }
     
     public static GetSongResponseDto mapSongToGetSongResponseDto(Song song) {
-        return new GetSongResponseDto(song);
+        SongDto songDto = mapSongToSongDto(song);
+        return new GetSongResponseDto(songDto);
     }
     
     public static Song mapUpdateSongRequestDtoToSong(UpdateSongRequestDto dto) {
