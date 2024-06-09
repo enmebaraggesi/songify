@@ -1,11 +1,13 @@
 package com.songify.song.service;
 
 import com.songify.song.repository.SongRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 @Log4j2
 @Service
+@Transactional
 public class SongDeleter {
     
     private final SongRepository songRepository;
