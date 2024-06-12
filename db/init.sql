@@ -1,3 +1,10 @@
+CREATE TABLE IF NOT EXISTS SONG
+(
+    ID     BIGSERIAL PRIMARY KEY,
+    ARTIST VARCHAR(255) NOT NULL,
+    NAME   VARCHAR(255) NOT NULL
+);
+
 INSERT INTO song (id, artist, name)
 VALUES (nextval('song_id_seq'), 'Ariana Grande', 'Tik Tok');
 INSERT INTO song (id, artist, name)
