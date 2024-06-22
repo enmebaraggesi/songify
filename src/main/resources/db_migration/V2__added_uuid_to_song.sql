@@ -1,0 +1,2 @@
+ALTER TABLE SONG
+    ADD uuid UUID;
