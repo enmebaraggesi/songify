@@ -1,4 +1,4 @@
-package com.songify.infrastructure.controller.dto.request;
+package com.songify.infrastructure.crud.song.controller.dto.request;
 
 public record PatchSongRequestDto(String songName, String artist) {
     

@@ -1,6 +1,7 @@
 package com.songify.domain.crud.song;
 
-import com.songify.infrastructure.controller.error.SongNotFoundException;
+import com.songify.infrastructure.crud.song.controller.error.SongNotFoundException;
+import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -9,13 +10,10 @@ import java.util.List;
 
 @Log4j2
 @Service
+@AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
 class SongRetriever {
     
     private final SongRepository songRepository;
-    
-    SongRetriever(SongRepository songRepository) {
-        this.songRepository = songRepository;
-    }
     
     List<Song> findAll(Pageable pageable) {
         log.info("Finding all songs");

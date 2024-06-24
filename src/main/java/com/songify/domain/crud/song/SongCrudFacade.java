@@ -1,10 +1,15 @@
 package com.songify.domain.crud.song;
 
+import com.songify.domain.crud.song.dto.SongDto;
+import com.songify.infrastructure.crud.song.controller.dto.response.SongDtoForJson;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.songify.domain.crud.song.SongCrudMapper.mapSongDtoForJsonToSongDto;
+import static com.songify.domain.crud.song.SongCrudMapper.mapSongToSongDto;
 
 @AllArgsConstructor
 @Service
@@ -15,27 +20,40 @@ public class SongCrudFacade {
     private final SongDeleter songDeleter;
     private final SongUpdater songUpdater;
     
-    public List<Song> findAll(final Pageable pageable) {
-        return songRetriever.findAll(pageable);
+    public List<SongDto> findAll(final Pageable pageable) {
+        return songRetriever.findAll(pageable)
+                            .stream()
+                            .map(SongCrudMapper::mapSongToSongDto)
+                            .toList();
     }
     
-    public Song findSongById(final Long id) {
-        return songRetriever.findSongById(id);
+    public SongDto findSongById(Long id) {
+        Song songById = songRetriever.findSongById(id);
+        return mapSongToSongDto(songById);
     }
     
-    public Song addSong(final Song song) {
-        return songAdder.addSong(song);
+    public SongDto addSong(final SongDtoForJson songDto) {
+        // some domain validator
+        Song vaidatedAndReadytoSaveSong = new Song(songDto.name());
+        // some domain validator ended checking
+        Song addedSong = songAdder.addSong(vaidatedAndReadytoSaveSong);
+        return mapSongToSongDto(addedSong);
     }
     
-    public void deleteById(final Long id) {
+    public void deleteById(Long id) {
         songDeleter.deleteById(id);
     }
     
-    public void updateById(final Long id, final Song newSong) {
-        songUpdater.updateById(id, newSong);
+    public void updateById(Long id, SongDtoForJson newSongDto) {
+        // some domain validator
+        Song songValidatedAndReadyToUpdate = new Song(newSongDto.name());
+        // some domain validator ended checking
+        songUpdater.updateById(id, songValidatedAndReadyToUpdate);
     }
     
-    public Song updatePartiallyById(final Long id, final Song updatedSong) {
-        return songUpdater.updatePartiallyById(id, updatedSong);
+    public SongDto updatePartiallyById(Long id, SongDtoForJson updatedSong) {
+        SongDto songDto = mapSongDtoForJsonToSongDto(updatedSong);
+        Song song = songUpdater.updatePartiallyById(id, songDto);
+        return mapSongToSongDto(song);
     }
 }

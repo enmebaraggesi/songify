@@ -1,4 +1,4 @@
-package com.songify.infrastructure.controller.api_validation;
+package com.songify.infrastructure.api_validation;
 
 import java.util.List;
 

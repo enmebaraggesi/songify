@@ -11,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,21 +19,12 @@ import java.time.Instant;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table
-public class Song extends BaseEntity {
+class Song extends BaseEntity {
     
-    @Column(nullable = false)
-    String name;
-    @Column(nullable = false)
-    String artist;
-    Instant releaseDate;
-    Long duration;
-    @Enumerated(EnumType.STRING)
-    SongLanguage language;
     @Id
     @GeneratedValue(generator = "song_id_seq", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(
@@ -44,8 +34,19 @@ public class Song extends BaseEntity {
     )
     private Long id;
     
-    public Song(String name, String artist) {
+    @Column(nullable = false)
+    private String name;
+    
+    private String artist;
+    
+    private Instant releaseDate;
+    
+    private Long duration;
+    
+    @Enumerated(EnumType.STRING)
+    private SongLanguage language;
+    
+    Song(String name) {
         this.name = name;
-        this.artist = artist;
     }
 }

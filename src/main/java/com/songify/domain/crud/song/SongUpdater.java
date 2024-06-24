@@ -1,24 +1,22 @@
 package com.songify.domain.crud.song;
 
+import com.songify.domain.crud.song.dto.SongDto;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 @Log4j2
 @Service
 @Transactional
+@AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
 class SongUpdater {
     
     private final SongRepository songRepository;
     private final SongRetriever songRetriever;
     
-    SongUpdater(SongRepository songRepository, SongRetriever songRetriever) {
-        this.songRepository = songRepository;
-        this.songRetriever = songRetriever;
-    }
-    
     void updateById(Long id, Song song) {
-        log.info("Updating song by id: {}", song.getId());
+        log.info("Updating song by id: {}", id);
         songRetriever.existsById(id);
         songRepository.updateById(id, song);
     }
@@ -32,24 +30,23 @@ class SongUpdater {
 //        songById.setArtist(song.getArtist());
 //    }
     
-    Song updatePartiallyById(Long id, Song updatedSong) {
+    Song updatePartiallyById(Long id, SongDto updatedSong) {
         Song songById = songRetriever.findSongById(id);
-        Song.SongBuilder builder = Song.builder();
-        if (updatedSong.getName() != null) {
-            builder.name(updatedSong.getName());
-            log.info("patched song id: {}, with new name: {}", id, updatedSong.getName());
+        Song toSave = new Song();
+        if (updatedSong.name() != null) {
+            toSave.setName(updatedSong.name());
+            log.info("patched song id: {}, with new name: {}", id, updatedSong.name());
         } else {
-            builder.name(songById.getName());
+            toSave.setName(songById.getName());
         }
-        if (updatedSong.getArtist() != null) {
-            builder.artist(updatedSong.getArtist());
-            log.info("patched song id: {}, with new artist: {}", id, updatedSong.getArtist());
-        } else {
-            builder.artist(songById.getArtist());
-        }
-        Song newSong = builder.build();
-        updateById(id, newSong);
-        return newSong;
+//        if (updatedSong.getArtist() != null) {
+//            toSave.artist(updatedSong.getArtist());
+//            log.info("patched song id: {}, with new artist: {}", id, updatedSong.getArtist());
+//        } else {
+//            toSave.artist(songById.getArtist());
+//        }
+        updateById(id, toSave);
+        return toSave;
     }
 
 //    DIRTY CHECKING METHOD - using setters over entity and @Transactional
