@@ -8,7 +8,7 @@ import org.springframework.data.repository.Repository;
 import java.util.List;
 import java.util.Optional;
 
-public interface SongRepository extends Repository<Song, Long> {
+interface SongRepository extends Repository<Song, Long> {
     
     Song save(Song song);
     
