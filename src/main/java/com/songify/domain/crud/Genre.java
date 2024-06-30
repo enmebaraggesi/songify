@@ -1,4 +1,4 @@
-package com.songify.domain.crud.artist;
+package com.songify.domain.crud;
 
 import com.songify.domain.crud.util.BaseEntity;
 import jakarta.persistence.Column;
@@ -16,13 +16,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter(AccessLevel.PACKAGE)
 @Setter(AccessLevel.PACKAGE)
-class Artist extends BaseEntity {
-    
+class Genre extends BaseEntity {
+
     @Id
-    @GeneratedValue(generator = "artist_id_seq", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "genre_id_seq", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(
-            name = "artist_id_seq",
-            sequenceName = "artist_id_seq",
+            name = "genre_id_seq",
+            sequenceName = "genre_id_seq",
             allocationSize = 1
     )
     private Long id;

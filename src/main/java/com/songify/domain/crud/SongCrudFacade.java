@@ -1,6 +1,6 @@
-package com.songify.domain.crud.song;
+package com.songify.domain.crud;
 
-import com.songify.domain.crud.song.dto.SongDto;
+import com.songify.domain.crud.dto.SongDto;
 import com.songify.infrastructure.crud.song.controller.dto.response.SongDtoForJson;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.songify.domain.crud.song.SongCrudMapper.mapSongDtoForJsonToSongDto;
-import static com.songify.domain.crud.song.SongCrudMapper.mapSongToSongDto;
+import static com.songify.domain.crud.SongCrudMapper.mapSongDtoForJsonToSongDto;
+import static com.songify.domain.crud.SongCrudMapper.mapSongToSongDto;
 
 @AllArgsConstructor
 @Service
