@@ -23,7 +23,7 @@ interface SongRepository extends Repository<Song, Long> {
     void deleteById(Long id);
     
     @Modifying
-    @Query("UPDATE Song s SET s.name = :#{#song.name}, s.artist = :#{#song.artist} WHERE s.id = :id")
+    @Query("UPDATE Song s SET s.name = :#{#song.name} WHERE s.id = :id")
     void updateById(Long id, Song song);
     
     boolean existsById(Long id);
