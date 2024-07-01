@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import lombok.AccessLevel;
@@ -37,4 +38,7 @@ class Album extends BaseEntity {
     
     @OneToMany(mappedBy = "album")
     private Set<Song> songs = new HashSet<>();
+    
+    @ManyToMany(mappedBy = "albums")
+    private Set<Artist> artists = new HashSet<>();
 }
