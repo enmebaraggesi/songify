@@ -1,7 +1,7 @@
 SONGIFY: APLIKACJA DO ZARZĄDZANIA PIOSENKAMI, ARTYSTAMI I ALBUMAMI
 
-1. można dodawać artystę (nazwa artysty)
-2. można dodawać gatunek muzyczny (nazwa gatunku)
+1. ~~można dodawać artystę (nazwa artysty)~~
+2. ~~można dodawać gatunek muzyczny (nazwa gatunku)~~
 3. można dodawać album (tytuł, data wydania, musi być w nim min. 1 piosenka)
 4. można dodawać piosenkę (tytuł, czas trwania, data wydania, artysta do którego należy)
 5. można usunąć artystę (usuwają się wówczas jego piosenki i albumy)
@@ -29,7 +29,7 @@ given there is no songs, artists, albums and genres created before
 2. when I post to /song with Song "Till I Collapse" then Song "Till I Collapse" is returned with ID 1
 3. when I post to /song with Song "Lose Yourself" then Song "Lose Yourself" is returned with ID 2
 4. when I go to /genre then I can see no genres
-5. when I post to /genre with Genre "Rap" then Genre "Rap" is returned with ID 1
+5. ~~when I post to /genre with Genre "Rap" then Genre "Rap" is returned with ID 1~~
 6. when I go to /song/1 then I can see default genre
 7. when I put to /song/1/genre/1 then Genre with ID 1 ("Rap") is added to Song with ID 1 ("Till I Collapse")
 8. when I go to /song/1 then I can see "Rap" genre
@@ -40,5 +40,5 @@ given there is no songs, artists, albums and genres created before
 13. when I put to /album/1/song/1 then Song with ID 1 ("Till I Collapse") is added to Album with ID 1 ("EminemAlbum1")
 14. when I put to /album/1/song/2 then Song with ID 2 ("Lose Yourself") is added to Album with ID 1 ("EminemAlbum1")
 15. when I go to /album/1/song then I can see 2 songs (id1, id2)
-16. when I post to /artist with Artist "Eminem" then Artist "Eminem" is returned with ID 1
+16. ~~when I post to /artist with Artist "Eminem" then Artist "Eminem" is returned with ID 1~~
 17. when I put to /album/1/artist/1 then Artist with ID 1 ("Eminem") is added to Album with ID 1 ("EminemAlbum1")

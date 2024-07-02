@@ -1,8 +1,8 @@
-package com.songify.infrastructure.crud.artist;
+package com.songify.infrastructure.crud.genre;
 
 import com.songify.domain.crud.SongifyCrudFacade;
-import com.songify.domain.crud.dto.ArtistDto;
-import com.songify.domain.crud.dto.ArtistRequestDto;
+import com.songify.domain.crud.dto.GenreDto;
+import com.songify.domain.crud.dto.GenreRequestDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("genre")
 @AllArgsConstructor
-@RequestMapping("artist")
-class ArtistController {
+class GenreController {
     
     private final SongifyCrudFacade songifyCrudFacade;
     
     @PostMapping
-    ResponseEntity<ArtistDto> createArtist(@RequestBody ArtistRequestDto dto) {
-        ArtistDto artistDto = songifyCrudFacade.addArtist(dto);
-        return ResponseEntity.ok(artistDto);
+    public ResponseEntity<GenreDto> createGenre(@RequestBody GenreRequestDto dto) {
+        GenreDto genreDto = songifyCrudFacade.addGenre(dto);
+        return ResponseEntity.ok(genreDto);
     }
 }

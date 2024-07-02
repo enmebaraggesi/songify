@@ -29,4 +29,8 @@ class Genre extends BaseEntity {
     
     @Column(nullable = false)
     private String name;
+    
+    Genre(final String name) {
+        this.name = name;
+    }
 }
