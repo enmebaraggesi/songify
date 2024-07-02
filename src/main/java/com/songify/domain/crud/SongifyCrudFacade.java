@@ -1,5 +1,7 @@
 package com.songify.domain.crud;
 
+import com.songify.domain.crud.dto.ArtistDto;
+import com.songify.domain.crud.dto.ArtistRequestDto;
 import com.songify.domain.crud.dto.SongDto;
 import com.songify.infrastructure.crud.song.controller.dto.response.SongDtoForJson;
 import lombok.AllArgsConstructor;
@@ -13,12 +15,17 @@ import static com.songify.domain.crud.SongCrudMapper.mapSongToSongDto;
 
 @AllArgsConstructor
 @Service
-public class SongCrudFacade {
+public class SongifyCrudFacade {
     
     private final SongAdder songAdder;
     private final SongRetriever songRetriever;
     private final SongDeleter songDeleter;
     private final SongUpdater songUpdater;
+    private final ArtistAdder artistAdder;
+    
+    public ArtistDto addArtist(ArtistRequestDto dto) {
+        return artistAdder.addArtist(dto.name());
+    }
     
     public List<SongDto> findAll(final Pageable pageable) {
         return songRetriever.findAll(pageable)
