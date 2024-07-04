@@ -16,7 +16,7 @@ class AlbumAdder {
     
     @Transactional
     AlbumDto addAlbum(final String title, final Instant releaseDate, final Long songId) {
-        Song song = songRetriever.findSongById(songId);
+        Song song = songRetriever.findById(songId);
         Album album = new Album();
         album.setTitle(title);
         album.setReleaseDate(releaseDate);

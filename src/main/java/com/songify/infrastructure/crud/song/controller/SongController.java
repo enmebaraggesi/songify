@@ -51,8 +51,8 @@ public class SongController {
     private final SongifyCrudFacade songifyCrudFacade;
     
     @GetMapping
-    public ResponseEntity<GetAllSongsResponseDto> getAllSongs(@PageableDefault(size = 20) Pageable pageable) {
-        List<SongDto> songDtoList = songifyCrudFacade.findAll(pageable);
+    public ResponseEntity<GetAllSongsResponseDto> getAllSongs(@PageableDefault(size = 20, sort = {"id"}) Pageable pageable) {
+        List<SongDto> songDtoList = songifyCrudFacade.findAllSongs(pageable);
         return ResponseEntity.ok(mapSongDtoListToGetAllSongsResponseDto(songDtoList));
     }
     
@@ -73,7 +73,7 @@ public class SongController {
     
     @DeleteMapping("{id}")
     public ResponseEntity<DeleteSongResponseDto> deleteSongById(@PathVariable Long id) {
-        songifyCrudFacade.deleteById(id);
+        songifyCrudFacade.deleteSongById(id);
         return ResponseEntity.ok(mapSongIdToDeleteSongResponseDto(id));
     }
     
@@ -81,7 +81,7 @@ public class SongController {
     public ResponseEntity<UpdateSongResponseDto> updateSongById(@PathVariable Long id,
                                                                 @RequestBody @Valid UpdateSongRequestDto requestDto) {
         SongDtoForJson newSong = mapUpdateSongRequestDtoToSong(requestDto);
-        songifyCrudFacade.updateById(id, newSong);
+        songifyCrudFacade.updateSongById(id, newSong);
         log.info("updating song id: {}, with: {}", id, newSong);
         return ResponseEntity.ok(mapSongDtoForJsonToUpdateSongResponseDto(newSong));
     }
@@ -90,7 +90,7 @@ public class SongController {
     public ResponseEntity<PatchSongResponseDto> patchSongById(@PathVariable Long id,
                                                               @RequestBody PatchSongRequestDto requestDto) {
         SongDtoForJson updatedSong = mapFromPatchSongRequestDtoToSongDtoForJson(requestDto);
-        SongDto updatePartiallyById = songifyCrudFacade.updatePartiallyById(id, updatedSong);
+        SongDto updatePartiallyById = songifyCrudFacade.updateSongPartiallyById(id, updatedSong);
         SongDtoForJson songDtoForJson = mapSongDtoToSongDtoForJson(updatePartiallyById);
         return ResponseEntity.ok(mapPatchSongResponseDto(songDtoForJson));
     }

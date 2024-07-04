@@ -31,7 +31,7 @@ class SongUpdater {
 //    }
     
     Song updatePartiallyById(Long id, SongDto updatedSong) {
-        Song songById = songRetriever.findSongById(id);
+        Song songById = songRetriever.findById(id);
         Song toSave = new Song();
         if (updatedSong.name() != null) {
             toSave.setName(updatedSong.name());

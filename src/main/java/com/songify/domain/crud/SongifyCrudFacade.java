@@ -31,6 +31,11 @@ public class SongifyCrudFacade {
     private final GenreAdder genreAdder;
     private final AlbumAdder albumAdder;
     
+    public SongDto addSong(final SongDtoForJson dto) {
+        Song addedSong = songAdder.addSong(dto);
+        return mapSongToSongDto(addedSong);
+    }
+    
     public ArtistDto addArtist(ArtistRequestDto dto) {
         return artistAdder.addArtist(dto.name());
     }
@@ -43,39 +48,30 @@ public class SongifyCrudFacade {
         return albumAdder.addAlbum(dto.title(), dto.releaseDate(), dto.songId());
     }
     
-    public List<SongDto> findAll(final Pageable pageable) {
-        return songRetriever.findAll(pageable)
-                            .stream()
-                            .map(SongCrudMapper::mapSongToSongDto)
-                            .toList();
-    }
-    
-    public Set<ArtistDto> findAllArtists() {
-        return artistRetriever.findAllArtists();
+    public List<SongDto> findAllSongs(final Pageable pageable) {
+        return songRetriever.findAllDtos(pageable);
     }
     
     public SongDto findSongById(Long id) {
-        Song songById = songRetriever.findSongById(id);
-        return mapSongToSongDto(songById);
+        return songRetriever.findDtoById(id);
     }
     
-    public SongDto addSong(final SongDtoForJson dto) {
-        Song addedSong = songAdder.addSong(dto);
-        return mapSongToSongDto(addedSong);
+    public Set<ArtistDto> findAllArtists(final Pageable pageable) {
+        return artistRetriever.findAllArtists(pageable);
     }
     
-    public void deleteById(Long id) {
+    public void deleteSongById(Long id) {
         songDeleter.deleteById(id);
     }
     
-    public void updateById(Long id, SongDtoForJson dto) {
+    public void updateSongById(Long id, SongDtoForJson dto) {
         // some domain validator
         Song songValidatedAndReadyToUpdate = new Song(dto.title());
         // some domain validator ended checking
         songUpdater.updateById(id, songValidatedAndReadyToUpdate);
     }
     
-    public SongDto updatePartiallyById(Long id, SongDtoForJson updatedSong) {
+    public SongDto updateSongPartiallyById(Long id, SongDtoForJson updatedSong) {
         SongDto songDto = mapSongDtoForJsonToSongDto(updatedSong);
         Song song = songUpdater.updatePartiallyById(id, songDto);
         return mapSongToSongDto(song);
