@@ -19,7 +19,7 @@ SONGIFY: APLIKACJA DO ZARZĄDZANIA PIOSENKAMI, ARTYSTAMI I ALBUMAMI
 17. można wyświetlać wszystkie gatunki
 18. ~~można wyświetlać wszystkich artystów~~
 19. można wyświetlać wszystkie albumy
-20. można wyświetlać wszystkie albumy z artystami oraz piosenkami
+20. ~~można wyświetlać wszystkie albumy z artystami oraz piosenkami~~
 21. można wyświetlać konkretne gatunki z piosenkami
 22. można wyświetlać konkretnych artystów z albumami
 
