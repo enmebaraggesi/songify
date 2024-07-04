@@ -2,6 +2,10 @@ package com.songify.domain.crud;
 
 import org.springframework.data.repository.CrudRepository;
 
-interface ArtistRepository extends CrudRepository<Artist, Integer> {
+import java.util.Set;
 
+interface ArtistRepository extends CrudRepository<Artist, Integer> {
+    
+    @Override
+    Set<Artist> findAll();
 }

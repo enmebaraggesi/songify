@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.songify.domain.crud.SongCrudMapper.mapSongDtoForJsonToSongDto;
 import static com.songify.domain.crud.SongCrudMapper.mapSongToSongDto;
@@ -26,6 +27,7 @@ public class SongifyCrudFacade {
     private final SongDeleter songDeleter;
     private final SongUpdater songUpdater;
     private final ArtistAdder artistAdder;
+    private final ArtistRetriever artistRetriever;
     private final GenreAdder genreAdder;
     private final AlbumAdder albumAdder;
     
@@ -46,6 +48,10 @@ public class SongifyCrudFacade {
                             .stream()
                             .map(SongCrudMapper::mapSongToSongDto)
                             .toList();
+    }
+    
+    public Set<ArtistDto> findAllArtists() {
+        return artistRetriever.findAllArtists();
     }
     
     public SongDto findSongById(Long id) {
