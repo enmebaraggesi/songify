@@ -11,12 +11,15 @@ class SongCrudMapper {
         return SongDto.builder()
                       .id(song.getId())
                       .name(song.getName())
+                      .language(song.getLanguage().toString())
+                      .duration(song.getDuration())
+                      .releaseDate(song.getReleaseDate())
                       .build();
     }
     
     static SongDto mapSongDtoForJsonToSongDto(SongDtoForJson song) {
         return SongDto.builder()
-                      .name(song.name())
+                      .name(song.title())
                       .build();
     }
 }

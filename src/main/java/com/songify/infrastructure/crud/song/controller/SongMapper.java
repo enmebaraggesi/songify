@@ -17,16 +17,22 @@ import java.util.List;
 
 public class SongMapper {
     
-    public static SongDtoForJson mapSongDtoToSongDtoForJson(SongDto songDto) {
+    public static SongDtoForJson mapSongDtoToSongDtoForJson(SongDto dto) {
         return SongDtoForJson.builder()
-                             .id(songDto.id())
-                             .name(songDto.name())
+                             .id(dto.id())
+                             .title(dto.name())
+                             .language(dto.language())
+                             .duration(dto.duration())
+                             .releaseDate(dto.releaseDate())
                              .build();
     }
     
-    static SongDtoForJson mapPostSongRequestDtoToSongDtoForJson(PostSongRequestDto requestDto) {
+    static SongDtoForJson mapPostSongRequestDtoToSongDtoForJson(PostSongRequestDto dto) {
         return SongDtoForJson.builder()
-                             .name(requestDto.songName())
+                             .title(dto.title())
+                             .language(dto.language())
+                             .releaseDate(dto.releaseDate())
+                             .duration(dto.duration())
                              .build();
     }
     
@@ -48,12 +54,12 @@ public class SongMapper {
     
     public static SongDtoForJson mapUpdateSongRequestDtoToSong(UpdateSongRequestDto requestDto) {
         return SongDtoForJson.builder()
-                             .name(requestDto.songName())
+                             .title(requestDto.songName())
                              .build();
     }
     
     public static UpdateSongResponseDto mapSongDtoForJsonToUpdateSongResponseDto(SongDtoForJson song) {
-        return new UpdateSongResponseDto(song.name());
+        return new UpdateSongResponseDto(song.title());
     }
     
     public static DeleteSongResponseDto mapSongIdToDeleteSongResponseDto(Long id) {
@@ -62,11 +68,11 @@ public class SongMapper {
     
     public static SongDtoForJson mapFromPatchSongRequestDtoToSongDtoForJson(PatchSongRequestDto requestDto) {
         return SongDtoForJson.builder()
-                             .name(requestDto.songName())
+                             .title(requestDto.songName())
                              .build();
     }
     
     public static PatchSongResponseDto mapPatchSongResponseDto(SongDtoForJson song) {
-        return new PatchSongResponseDto("updated song " + song.name());
+        return new PatchSongResponseDto("updated song " + song.title());
     }
 }

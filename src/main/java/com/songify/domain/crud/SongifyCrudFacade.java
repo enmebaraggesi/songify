@@ -53,11 +53,8 @@ public class SongifyCrudFacade {
         return mapSongToSongDto(songById);
     }
     
-    public SongDto addSong(final SongDtoForJson songDto) {
-        // some domain validator
-        Song vaidatedAndReadytoSaveSong = new Song(songDto.name());
-        // some domain validator ended checking
-        Song addedSong = songAdder.addSong(vaidatedAndReadytoSaveSong);
+    public SongDto addSong(final SongDtoForJson dto) {
+        Song addedSong = songAdder.addSong(dto);
         return mapSongToSongDto(addedSong);
     }
     
@@ -65,9 +62,9 @@ public class SongifyCrudFacade {
         songDeleter.deleteById(id);
     }
     
-    public void updateById(Long id, SongDtoForJson newSongDto) {
+    public void updateById(Long id, SongDtoForJson dto) {
         // some domain validator
-        Song songValidatedAndReadyToUpdate = new Song(newSongDto.name());
+        Song songValidatedAndReadyToUpdate = new Song(dto.title());
         // some domain validator ended checking
         songUpdater.updateById(id, songValidatedAndReadyToUpdate);
     }

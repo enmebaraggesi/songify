@@ -65,8 +65,8 @@ public class SongController {
     }
     
     @PostMapping
-    public ResponseEntity<PostSongResponseDto> addSong(@RequestBody @Valid PostSongRequestDto requestDto) {
-        SongDtoForJson song = mapPostSongRequestDtoToSongDtoForJson(requestDto);
+    public ResponseEntity<PostSongResponseDto> addSongWithArtist(@RequestBody @Valid PostSongRequestDto dto) {
+        SongDtoForJson song = mapPostSongRequestDtoToSongDtoForJson(dto);
         SongDto addedSong = songifyCrudFacade.addSong(song);
         return ResponseEntity.ok(mapSongDtoToPostSongResponseDto(addedSong));
     }

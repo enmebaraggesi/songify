@@ -2,7 +2,7 @@ SONGIFY: APLIKACJA DO ZARZĄDZANIA PIOSENKAMI, ARTYSTAMI I ALBUMAMI
 
 1. ~~można dodawać artystę (nazwa artysty)~~
 2. ~~można dodawać gatunek muzyczny (nazwa gatunku)~~
-3. można dodawać album (tytuł, data wydania, musi być w nim min. 1 piosenka)
+3. ~~można dodawać album (tytuł, data wydania, musi być w nim min. 1 piosenka)~~
 4. można dodawać piosenkę (tytuł, czas trwania, data wydania, artysta do którego należy)
 5. można usunąć artystę (usuwają się wówczas jego piosenki i albumy)
 6. można usunąć gatunek (nie może istnieć żadna piosenka przypisana do gatunku)
@@ -35,7 +35,7 @@ given there is no songs, artists, albums and genres created before
 8. when I go to /song/1 then I can see "Rap" genre
 9. when I put to /song/2/genre/1 then Genre with ID 1 ("Rap") is added to Song with ID 2 ("Lose Yourself")
 10. when I go to /album then I see no albums
-11. when I post to /album with Album "EminemAlbum1" and Song with ID 1 then Album "EminemAlbum1" is returned with ID 1
+11. ~~when I post to /album with Album "EminemAlbum1" and Song with ID 1 then Album "EminemAlbum1" is returned with ID 1~~
 12. when I go to /album/1 then I can see song with ID 1 added to album
 13. when I put to /album/1/song/1 then Song with ID 1 ("Till I Collapse") is added to Album with ID 1 ("EminemAlbum1")
 14. when I put to /album/1/song/2 then Song with ID 2 ("Lose Yourself") is added to Album with ID 1 ("EminemAlbum1")
