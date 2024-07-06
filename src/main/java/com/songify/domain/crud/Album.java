@@ -1,6 +1,7 @@
 package com.songify.domain.crud;
 
 import com.songify.domain.crud.util.BaseEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,21 +37,22 @@ class Album extends BaseEntity {
     
     private Instant releaseDate;
     
-    @OneToMany(mappedBy = "album")
+    @OneToMany(mappedBy = "album",
+               cascade = {CascadeType.PERSIST, CascadeType.MERGE}) //to save automatically added new song
     private Set<Song> songs = new HashSet<>();
     
     @ManyToMany(mappedBy = "albums")
     private Set<Artist> artists = new HashSet<>();
     
-    void addSong(final Song songById) {
-        songs.add(songById);
+    void addSong(final Song song) {
+        songs.add(song);
     }
     
-    void removeArtist(Artist artist) {
+    void removeArtist(final Artist artist) {
         artists.remove(artist);
     }
     
-    void addArtist(Artist artist) {
+    void addArtist(final Artist artist) {
         artists.add(artist);
     }
 }

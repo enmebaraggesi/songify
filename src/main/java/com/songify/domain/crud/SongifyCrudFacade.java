@@ -45,16 +45,20 @@ public class SongifyCrudFacade {
         return artistAdder.addArtist(dto.name());
     }
     
+    public void addArtistToAlbum(Long artistId, Long albumId) {
+        artistAssigner.addArtistToAlbum(artistId, albumId);
+    }
+    
+    public ArtistDto addArtistWithDefaultAlbumAndSong(ArtistRequestDto dto) {
+        return artistAdder.addArtistWithDefaultAlbumAndSong(dto);
+    }
+    
     public GenreDto addGenre(GenreRequestDto dto) {
         return genreAdder.addGenre(dto.name());
     }
     
     public AlbumDto addAlbumWithSongs(AlbumRequestDto dto) {
         return albumAdder.addAlbum(dto.title(), dto.releaseDate(), dto.songId());
-    }
-    
-    public void addArtistToAlbum(Long artistId, Long albumId) {
-        artistAssigner.addArtistToAlbum(artistId, albumId);
     }
     
     public List<SongDto> findAllSongs(final Pageable pageable) {

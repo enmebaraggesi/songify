@@ -4,24 +4,25 @@ SONGIFY: APLIKACJA DO ZARZĄDZANIA PIOSENKAMI, ARTYSTAMI I ALBUMAMI
 2. ~~można dodawać gatunek muzyczny (nazwa gatunku)~~
 3. ~~można dodawać album (tytuł, data wydania, musi być w nim min. 1 piosenka)~~
 4. można dodawać piosenkę (tytuł, czas trwania, data wydania, artysta do którego należy)
-5. ~~można usunąć artystę (usuwają się wówczas jego piosenki i albumy)~~
-6. można usunąć gatunek (nie może istnieć żadna piosenka przypisana do gatunku)
-7. można usunąć album (nie może istnieć żadna piosenka przypisana do albumu)
-8. ~~można usunąć piosenkę~~
-9. ~~można edytować nazwę artysty~~
-10. można edytować nazwę gatunku
-11. można edytować zawartość, artystów, nazwę albumu
-12. można edytować czas trwania, artystę, nazwę piosenki
-13. można przypisać piosenki do albumów
-14. ~~można przypisać artystów do albumów~~
-15. można przypisać jeden gatunek muzyczny do piosenki
-16. można wyświetlać wszystkie piosenki
-17. można wyświetlać wszystkie gatunki
-18. ~~można wyświetlać wszystkich artystów~~
-19. można wyświetlać wszystkie albumy
-20. ~~można wyświetlać wszystkie albumy z artystami oraz piosenkami~~
-21. można wyświetlać konkretne gatunki z piosenkami
-22. można wyświetlać konkretnych artystów z albumami
+5. ~~można dodać artystę od razu z albumem i piosenką (domyślne wartości)~~
+6. ~~można usunąć artystę (usuwają się wówczas jego piosenki i albumy)~~
+7. można usunąć gatunek (nie może istnieć żadna piosenka przypisana do gatunku)
+8. można usunąć album (nie może istnieć żadna piosenka przypisana do albumu)
+9. ~~można usunąć piosenkę~~
+10. ~~można edytować nazwę artysty~~
+11. można edytować nazwę gatunku
+12. można edytować zawartość, artystów, nazwę albumu
+13. można edytować czas trwania, artystę, nazwę piosenki
+14. można przypisać piosenki do albumów
+15. ~~można przypisać artystów do albumów~~
+16. można przypisać jeden gatunek muzyczny do piosenki
+17. można wyświetlać wszystkie piosenki
+18. można wyświetlać wszystkie gatunki
+19. ~~można wyświetlać wszystkich artystów~~
+20. można wyświetlać wszystkie albumy
+21. ~~można wyświetlać wszystkie albumy z artystami oraz piosenkami~~
+22. można wyświetlać konkretne gatunki z piosenkami
+23. można wyświetlać konkretnych artystów z albumami
 
 HAPPY PATH (user tworzy album "Eminema" z piosenkami "Till I Collapse", "Lose Yourself" o gatunku "Rap")
 given there is no songs, artists, albums and genres created before
