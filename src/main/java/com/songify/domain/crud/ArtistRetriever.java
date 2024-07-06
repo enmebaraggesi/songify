@@ -1,6 +1,7 @@
 package com.songify.domain.crud;
 
 import com.songify.domain.crud.dto.ArtistDto;
+import com.songify.infrastructure.crud.artist.error.ArtistNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,5 +22,10 @@ class ArtistRetriever {
                                 artist.getId(),
                                 artist.getName()))
                         .collect(Collectors.toSet());
+    }
+    
+    Artist findById(final Long id) {
+        return artistRepository.findById(id)
+                               .orElseThrow(() -> new ArtistNotFoundException("Artist with ID " + id + "not found"));
     }
 }
