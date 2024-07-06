@@ -13,7 +13,7 @@ SONGIFY: APLIKACJA DO ZARZĄDZANIA PIOSENKAMI, ARTYSTAMI I ALBUMAMI
 11. można edytować zawartość, artystów, nazwę albumu
 12. można edytować czas trwania, artystę, nazwę piosenki
 13. można przypisać piosenki do albumów
-14. można przypisać artystów do albumów
+14. ~~można przypisać artystów do albumów~~
 15. można przypisać jeden gatunek muzyczny do piosenki
 16. można wyświetlać wszystkie piosenki
 17. można wyświetlać wszystkie gatunki

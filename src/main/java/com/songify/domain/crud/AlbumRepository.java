@@ -18,6 +18,9 @@ interface AlbumRepository extends CrudRepository<Album, Integer> {
     
     Optional<AlbumInfo> findById(Long id);
     
+    @Query("select a from Album a where a.id = :id")
+    Optional<Album> findAlbumById(Long id);
+    
     @Query("""
            select a from Album a
            inner join a.artists artists
