@@ -31,6 +31,7 @@ public class SongifyCrudFacade {
     private final ArtistRetriever artistRetriever;
     private final ArtistDeleter artistDeleter;
     private final ArtistAssigner artistAssigner;
+    private final ArtistUpdater artistUpdater;
     private final GenreAdder genreAdder;
     private final AlbumAdder albumAdder;
     private final AlbumRetriever albumRetriever;
@@ -91,5 +92,9 @@ public class SongifyCrudFacade {
         SongDto songDto = mapSongDtoForJsonToSongDto(updatedSong);
         Song song = songUpdater.updatePartiallyById(id, songDto);
         return mapSongToSongDto(song);
+    }
+    
+    public ArtistDto updateArtistNameById(Long id, String name) {
+        return artistUpdater.updateArtistNameById(id, name);
     }
 }

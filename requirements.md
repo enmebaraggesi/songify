@@ -8,7 +8,7 @@ SONGIFY: APLIKACJA DO ZARZĄDZANIA PIOSENKAMI, ARTYSTAMI I ALBUMAMI
 6. można usunąć gatunek (nie może istnieć żadna piosenka przypisana do gatunku)
 7. można usunąć album (nie może istnieć żadna piosenka przypisana do albumu)
 8. ~~można usunąć piosenkę~~
-9. można edytować piosenki artysty, nazwę artysty
+9. ~~można edytować nazwę artysty~~
 10. można edytować nazwę gatunku
 11. można edytować zawartość, artystów, nazwę albumu
 12. można edytować czas trwania, artystę, nazwę piosenki
