@@ -35,7 +35,7 @@ class ArtistAdder {
         album.setTitle("album: " + UUID.randomUUID());
         album.setReleaseDate(LocalDateTime.now().toInstant(ZoneOffset.UTC));
         
-        Song song = new Song(99L,
+        Song song = new Song(0L,
                              SongLanguage.OTHER,
                              "song: " + UUID.randomUUID(),
                              Instant.now());

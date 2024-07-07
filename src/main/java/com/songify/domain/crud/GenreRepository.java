@@ -1,7 +1,8 @@
 package com.songify.domain.crud;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.Repository;
 
-interface GenreRepository extends CrudRepository<Genre, Integer> {
-
+interface GenreRepository extends Repository<Genre, Integer> {
+    
+    Genre save(Genre genre);
 }

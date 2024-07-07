@@ -3,13 +3,13 @@ package com.songify.domain.crud;
 import com.songify.domain.crud.dto.AlbumInfo;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.Repository;
 
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
-interface AlbumRepository extends CrudRepository<Album, Integer> {
+interface AlbumRepository extends Repository<Album, Integer> {
 
 //    Optional<Album> findById(Long id);
 
