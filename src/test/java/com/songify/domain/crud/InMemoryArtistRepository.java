@@ -25,7 +25,7 @@ class InMemoryArtistRepository implements ArtistRepository {
     
     @Override
     public void deleteById(final Long id) {
-    
+        artists.remove(id);
     }
     
     @Override

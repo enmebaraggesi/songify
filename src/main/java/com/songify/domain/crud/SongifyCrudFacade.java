@@ -101,4 +101,8 @@ public class SongifyCrudFacade {
     public ArtistDto updateArtistNameById(Long id, String name) {
         return artistUpdater.updateArtistNameById(id, name);
     }
+    
+    public Set<AlbumDto> findAlbumsByArtistId(final Long id) {
+        return albumRetriever.findAllAlbumsDtoByArtistId(id);
+    }
 }

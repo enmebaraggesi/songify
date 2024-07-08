@@ -30,8 +30,8 @@ class SongifyCrudFacadeTest {
         ArtistRequestDto artist = ArtistRequestDto.builder()
                                                   .name("test")
                                                   .build();
-        Set<ArtistDto> artistsCollection = songifyCrudFacade.findAllArtists(Pageable.unpaged());
-        assertTrue(artistsCollection.isEmpty());
+        Set<ArtistDto> artists = songifyCrudFacade.findAllArtists(Pageable.unpaged());
+        assertTrue(artists.isEmpty());
         //when
         ArtistDto result = songifyCrudFacade.addArtist(artist);
         //then
@@ -51,5 +51,20 @@ class SongifyCrudFacadeTest {
         //then
         assertThat(throwable).isInstanceOf(ArtistNotFoundException.class);
         assertThat(throwable.getMessage()).isEqualTo("Artist with ID 0 not found");
+    }
+    
+    @Test
+    @DisplayName("should delete artist by id when he has no albums")
+    public void should_delete_artist_by_id_when_he_has_no_albums() {
+        //given
+        ArtistRequestDto artist = ArtistRequestDto.builder()
+                                                  .name("test")
+                                                  .build();
+        Long artistId = songifyCrudFacade.addArtist(artist).id();
+        assertThat(songifyCrudFacade.findAlbumsByArtistId(artistId)).isEmpty();
+        //when
+        songifyCrudFacade.deleteArtistByIdWithAlbumsAndSongs(artistId);
+        //then
+        assertThat(songifyCrudFacade.findAllArtists(Pageable.unpaged())).isEmpty();
     }
 }
