@@ -20,6 +20,9 @@ class InMemoryAlbumRepository implements AlbumRepository {
     @Override
     public Optional<AlbumInfo> findById(final Long id) {
         Album album = albums.get(id);
+        if (album == null) {
+            return Optional.empty();
+        }
         return Optional.ofNullable(new AlbumInfoTestImpl(album));
     }
     
