@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
+@SuppressWarnings("ALL")
 class InMemoryAlbumRepository implements AlbumRepository {
     
     @Override
@@ -26,5 +27,10 @@ class InMemoryAlbumRepository implements AlbumRepository {
     @Override
     public void deleteByIdIn(final Collection<Long> ids) {
     
+    }
+    
+    @Override
+    public Album save(final Album album) {
+        return null;
     }
 }

@@ -20,7 +20,7 @@ class InMemoryArtistRepository implements ArtistRepository {
     
     @Override
     public Optional<Artist> findById(final Long id) {
-        return Optional.empty();
+        return Optional.ofNullable(artists.get(id));
     }
     
     @Override
