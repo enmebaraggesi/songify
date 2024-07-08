@@ -22,7 +22,7 @@ class SongRetriever {
                              .orElseThrow(() -> new SongNotFoundException("cannot find song with id " + id));
     }
     
-    List<SongDto> findAllDtos(Pageable pageable) {
+    List<SongDto> findAllSongs(Pageable pageable) {
         log.info("Finding all songs");
         return songRepository.findAll(pageable)
                              .stream()

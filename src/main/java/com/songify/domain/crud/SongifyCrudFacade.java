@@ -62,7 +62,7 @@ public class SongifyCrudFacade {
     }
     
     public List<SongDto> findAllSongs(final Pageable pageable) {
-        return songRetriever.findAllDtos(pageable);
+        return songRetriever.findAllSongs(pageable);
     }
     
     public SongDto findSongById(Long id) {
@@ -104,5 +104,13 @@ public class SongifyCrudFacade {
     
     public Set<AlbumDto> findAlbumsByArtistId(final Long id) {
         return albumRetriever.findAllAlbumsDtoByArtistId(id);
+    }
+    
+    public Set<AlbumDto> findAllAlbums(final Pageable pageable) {
+        return albumRetriever.findAllAlbums(pageable);
+    }
+    
+    int countArtistsForAlbumId(final Long albumId) {
+        return albumRetriever.countArtistsForAlbumId(albumId);
     }
 }

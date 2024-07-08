@@ -4,6 +4,7 @@ import com.songify.domain.crud.dto.AlbumDto;
 import com.songify.domain.crud.dto.AlbumInfo;
 import com.songify.infrastructure.crud.album.error.AlbumNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -56,5 +57,17 @@ class AlbumRetriever {
         return albumsByArtistId.stream()
                                .map(album -> new AlbumDto(album.getId(), album.getTitle()))
                                .collect(Collectors.toSet());
+    }
+    
+    Set<AlbumDto> findAllAlbums(final Pageable pageable) {
+        Set<Album> allAlbums = albumRepository.findAll(pageable);
+        return allAlbums.stream()
+                        .map(album -> new AlbumDto(album.getId(), album.getTitle()))
+                        .collect(Collectors.toSet());
+    }
+    
+    int countArtistsForAlbumId(final Long albumId) {
+        return findById(albumId).getArtists()
+                                .size();
     }
 }
