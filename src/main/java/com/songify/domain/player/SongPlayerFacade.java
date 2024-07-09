@@ -2,11 +2,9 @@ package com.songify.domain.player;
 
 import com.songify.domain.crud.SongifyCrudFacade;
 import com.songify.domain.crud.dto.SongDto;
-import org.springframework.stereotype.Service;
 
-@Service
 public class SongPlayerFacade {
-
+    
     private final SongifyCrudFacade songifyCrudFacade;
     private final YouTubeHttpClient youTubeHttpClient;
     
