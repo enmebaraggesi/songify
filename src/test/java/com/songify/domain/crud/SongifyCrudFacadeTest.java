@@ -36,7 +36,7 @@ class SongifyCrudFacadeTest {
     public void should_add_song() {
         //given
         SongDtoForJson song = SongDtoForJson.builder()
-                                            .title("test")
+                                            .title("testSong")
                                             .language("english")
                                             .build();
         assertThat(songifyCrudFacade.findAllSongs(Pageable.unpaged())).isEmpty();
@@ -44,8 +44,10 @@ class SongifyCrudFacadeTest {
         SongDto addedSong = songifyCrudFacade.addSong(song);
         //then
         assertThat(songifyCrudFacade.findAllSongs(Pageable.unpaged()).size()).isEqualTo(1);
-        assertThat(addedSong.id()).isEqualTo(0L);
-        assertThat(addedSong.name()).isEqualTo("test");
+        assertThat(songifyCrudFacade.findAllSongs(Pageable.unpaged()))
+                .extracting(SongDto::id)
+                .containsExactly(0L);
+        assertThat(addedSong.name()).isEqualTo("testSong");
         assertThat(addedSong.language()).isEqualTo("ENGLISH");
     }
     
@@ -66,7 +68,7 @@ class SongifyCrudFacadeTest {
     public void should_add_artist() {
         //given
         ArtistRequestDto artist = ArtistRequestDto.builder()
-                                                  .name("test")
+                                                  .name("testArtist")
                                                   .build();
         Set<ArtistDto> artists = songifyCrudFacade.findAllArtists(Pageable.unpaged());
         assertTrue(artists.isEmpty());
@@ -76,12 +78,12 @@ class SongifyCrudFacadeTest {
         Set<ArtistDto> artistsCollectionAfterSave = songifyCrudFacade.findAllArtists(Pageable.unpaged());
         assertEquals(1, artistsCollectionAfterSave.size());
         assertThat(result.id()).isEqualTo(0L);
-        assertThat(result.name()).isEqualTo("test");
+        assertThat(result.name()).isEqualTo("testArtist");
     }
     
     @Test
-    @DisplayName("should throw exception Artist Not Found when ID:0")
-    public void should_throw_exception_artist_not_found_when_id_was_zero() {
+    @DisplayName("should throw exception when artist not found by id")
+    public void should_throw_exception_when_artist_not_found_by_id() {
         //given
         assertThat(songifyCrudFacade.findAllArtists(Pageable.unpaged())).isEmpty();
         //when
@@ -95,15 +97,14 @@ class SongifyCrudFacadeTest {
     @DisplayName("should add artist to album")
     public void should_add_artist_to_album() {
         //given
-        ArtistRequestDto artist = ArtistRequestDto.builder()
-                                                  .name("test")
-                                                  .build();
-        Long artistId = songifyCrudFacade.addArtist(artist).id();
+        Long artistId = songifyCrudFacade.addArtist(ArtistRequestDto.builder()
+                                                                    .name("testArtist")
+                                                                    .build()).id();
         Long songId = songifyCrudFacade.addSong(SongDtoForJson.builder()
                                                               .language("english")
                                                               .build()).id();
         AlbumRequestDto album = AlbumRequestDto.builder()
-                                               .title("test")
+                                               .title("testAlbum")
                                                .releaseDate(Instant.now())
                                                .songId(songId)
                                                .build();
@@ -111,10 +112,9 @@ class SongifyCrudFacadeTest {
         //when
         songifyCrudFacade.addArtistToAlbum(artistId, albumId);
         //then
-        AlbumInfo albumWithArtist = songifyCrudFacade.findAlbumByIdWithArtistsAndSongs(albumId);
-        assertThat(albumWithArtist.getTitle()).isEqualTo("test");
-        Set<AlbumInfo.ArtistInfo> artists = albumWithArtist.getArtists();
-        assertTrue(artists.stream().anyMatch(artistInfo -> artistInfo.getName().equals("test")));
+        Set<AlbumDto> albumsByArtistId = songifyCrudFacade.findAlbumsByArtistId(artistId);
+        assertThat(albumsByArtistId).extracting(AlbumDto::id)
+                                    .containsExactly(albumId);
     }
     
     @Test
@@ -122,7 +122,7 @@ class SongifyCrudFacadeTest {
     public void should_delete_artist_by_id_when_he_has_no_albums() {
         //given
         ArtistRequestDto artist = ArtistRequestDto.builder()
-                                                  .name("test")
+                                                  .name("testArtist")
                                                   .build();
         Long artistId = songifyCrudFacade.addArtist(artist).id();
         assertThat(songifyCrudFacade.findAlbumsByArtistId(artistId)).isEmpty();
@@ -133,19 +133,19 @@ class SongifyCrudFacadeTest {
     }
     
     @Test
-    @DisplayName("should delete artist by id with albums and songs when he has one album and was albums only artist")
-    public void should_delete_artist_by_id_with_albums_and_songs_when_he_has_one_album_and_was_albums_only_artist() {
+    @DisplayName("should delete artist with albums and songs when there was only one artist owning albums")
+    public void should_delete_artist_with_albums_and_songs_when_there_was_only_one_artist_owning_albums() {
         //given
         ArtistRequestDto artist = ArtistRequestDto.builder()
-                                                  .name("test")
+                                                  .name("testArtist")
                                                   .build();
         Long artistId = songifyCrudFacade.addArtist(artist).id();
         SongDto song = songifyCrudFacade.addSong(SongDtoForJson.builder()
-                                                               .title("test")
+                                                               .title("testSong")
                                                                .language("english")
                                                                .build());
         Long albumId = songifyCrudFacade.addAlbumWithSongs(AlbumRequestDto.builder()
-                                                                          .title("test")
+                                                                          .title("testAlbum")
                                                                           .releaseDate(Instant.now())
                                                                           .songId(song.id())
                                                                           .build()).id();
@@ -162,18 +162,44 @@ class SongifyCrudFacadeTest {
     }
     
     @Test
-    @DisplayName("Should delete only artist from album by id When there were more than 1 artist in album")
-    public void should_delete_only_artist_from_album_by_when_there_were_more_than_one_artist_in_album() {
-//        assertThat(songifyCrudFacade.findAlbumByIdWithArtistsAndSongs(albumId)
-//                .getArtists()
-//                .size()).isGreaterThanOrEqualTo(2);
-        // TODO homework
-    }
-    
-    @Test
-    @DisplayName("should_delete_artist_with_albums_and_songs_by_id_when_artist_was_the_only_artist_in_albums")
-    public void should_delete_artist_with_albums_and_songs_by_id_when_artist_was_the_only_artist_in_albums() {
-        // TODO homework
+    @DisplayName("should delete artist from album by id when there were more than one artist in album")
+    public void should_delete_artist_only_from_album_by_id_when_there_were_more_than_one_artist_in_album() {
+        //given
+        Long songId = songifyCrudFacade.addSong(SongDtoForJson.builder()
+                                                              .title("testSong")
+                                                              .language("english")
+                                                              .build()).id();
+        Long albumId = songifyCrudFacade.addAlbumWithSongs(AlbumRequestDto.builder()
+                                                                          .title("testAlbum")
+                                                                          .releaseDate(Instant.now())
+                                                                          .songId(songId)
+                                                                          .build()).id();
+        ArtistRequestDto artist1 = ArtistRequestDto.builder()
+                                                   .name("testArtist1")
+                                                   .build();
+        ArtistRequestDto artist2 = ArtistRequestDto.builder()
+                                                   .name("testArtist2")
+                                                   .build();
+        Long artistId1 = songifyCrudFacade.addArtist(artist1).id();
+        Long artistId2 = songifyCrudFacade.addArtist(artist2).id();
+        songifyCrudFacade.addArtistToAlbum(artistId1, albumId);
+        songifyCrudFacade.addArtistToAlbum(artistId2, albumId);
+        assertThat(songifyCrudFacade.findAlbumByIdWithArtistsAndSongs(albumId)
+                                    .getArtists()
+                                    .size()).isEqualTo(2);
+        //when
+        songifyCrudFacade.deleteArtistByIdWithAlbumsAndSongs(artistId1);
+        //then
+        Set<AlbumInfo.ArtistInfo> albumArtists = songifyCrudFacade.findAlbumByIdWithArtistsAndSongs(albumId)
+                                                             .getArtists();
+        assertThat(albumArtists.size()).isEqualTo(1);
+        assertThat(albumArtists).extracting(AlbumInfo.ArtistInfo::getName)
+                                .containsExactly("testArtist2");
+        Set<AlbumInfo.SongInfo> songs = songifyCrudFacade.findAlbumByIdWithArtistsAndSongs(albumId)
+                                                         .getSongs();
+        assertThat(songs.size()).isEqualTo(1);
+        assertThat(songs).extracting(AlbumInfo.SongInfo::getName)
+                         .containsExactly("testSong");
     }
     
     @Test
@@ -181,20 +207,21 @@ class SongifyCrudFacadeTest {
     public void should_return_album_by_id() {
         //given
         assertThat(songifyCrudFacade.findAllAlbums(Pageable.unpaged())).isEmpty();
-        SongDto song = songifyCrudFacade.addSong(SongDtoForJson.builder()
-                                                               .title("test")
-                                                               .language("english")
-                                                               .build());
+        Long songId = songifyCrudFacade.addSong(SongDtoForJson.builder()
+                                                              .title("testSong")
+                                                              .language("english")
+                                                              .build()).id();
         Long albumId = songifyCrudFacade.addAlbumWithSongs(AlbumRequestDto.builder()
-                                                                          .title("test")
+                                                                          .title("testAlbum")
                                                                           .releaseDate(Instant.now())
-                                                                          .songId(song.id())
+                                                                          .songId(songId)
                                                                           .build()).id();
         //when
         AlbumInfo albumById = songifyCrudFacade.findAlbumByIdWithArtistsAndSongs(albumId);
         //then
         assertThat(songifyCrudFacade.findAllAlbums(Pageable.unpaged()).size()).isEqualTo(1);
-        assertThat(albumById.getId()).isEqualTo(0L);
+        assertThat(albumById.getId()).isEqualTo(albumId);
+        assertThat(albumById.getTitle()).isEqualTo("testAlbum");
     }
     
     @Test
@@ -202,11 +229,11 @@ class SongifyCrudFacadeTest {
     public void should_add_album_with_song() {
         //given
         SongDto song = songifyCrudFacade.addSong(SongDtoForJson.builder()
-                                                               .title("test")
+                                                               .title("testSong")
                                                                .language("english")
                                                                .build());
         AlbumRequestDto album = AlbumRequestDto.builder()
-                                               .title("test")
+                                               .title("testAlbum")
                                                .releaseDate(Instant.now())
                                                .songId(song.id())
                                                .build();
@@ -217,7 +244,7 @@ class SongifyCrudFacadeTest {
         assertThat(songifyCrudFacade.findAllAlbums(Pageable.unpaged()).size()).isEqualTo(1);
         AlbumInfo albumWithSongs = songifyCrudFacade.findAlbumByIdWithArtistsAndSongs(addedAlbum.id());
         assertThat(albumWithSongs.getId()).isEqualTo(0L);
-        assertThat(albumWithSongs.getTitle()).isEqualTo("test");
+        assertThat(albumWithSongs.getTitle()).isEqualTo("testAlbum");
         Set<AlbumInfo.SongInfo> songs = albumWithSongs.getSongs();
         assertTrue(songs.stream().anyMatch(songInfo -> songInfo.getId().equals(song.id())));
     }

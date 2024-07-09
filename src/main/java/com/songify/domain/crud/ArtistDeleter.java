@@ -24,7 +24,7 @@ class ArtistDeleter {
         Artist artist = artistRetriever.findById(id);
         Set<Album> albumSet = albumRetriever.findAllAlbumsByArtistId(artist.getId());
         // remove artist while they have no albums
-        if (!albumSet.isEmpty()) {
+        if (albumSet.isEmpty()) {
             log.info("Artist with ID {} has 0 albums", id);
             artistRepository.deleteById(id);
         }
@@ -36,18 +36,20 @@ class ArtistDeleter {
                 });
         // delete songs from albums of only this artist
         Set<Album> selectedArtistAlbums = filterOutAlbumsWithOnlySelectedArtist(albumSet, artist);
-        Set<Long> allSongsIds = selectedArtistAlbums
-                .stream()
-                .flatMap(album -> album.getSongs().stream())
-                .map(Song::getId)
-                .collect(Collectors.toSet());
-        songDeleter.deleteAllSongsByIds(allSongsIds);
-        // delete albums of only this artist
-        Set<Long> albumsIds = selectedArtistAlbums
-                .stream()
-                .map(Album::getId)
-                .collect(Collectors.toSet());
-        albumDeleter.deleteAllAlbumsByIds(albumsIds);
+        if (!selectedArtistAlbums.isEmpty()) {
+            Set<Long> allSongsIds = selectedArtistAlbums
+                    .stream()
+                    .flatMap(album -> album.getSongs().stream())
+                    .map(Song::getId)
+                    .collect(Collectors.toSet());
+            songDeleter.deleteAllSongsByIds(allSongsIds);
+            // delete albums of only this artist
+            Set<Long> albumsIds = selectedArtistAlbums
+                    .stream()
+                    .map(Album::getId)
+                    .collect(Collectors.toSet());
+            albumDeleter.deleteAllAlbumsByIds(albumsIds);
+        }
         // delete artist
         artistRepository.deleteById(id);
     }
