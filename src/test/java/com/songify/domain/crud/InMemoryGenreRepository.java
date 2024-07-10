@@ -1,5 +1,6 @@
 package com.songify.domain.crud;
 
+import java.util.List;
 import java.util.Optional;
 
 class InMemoryGenreRepository implements GenreRepository {
@@ -12,5 +13,10 @@ class InMemoryGenreRepository implements GenreRepository {
     @Override
     public Optional<Genre> findById(final Long id) {
         return Optional.empty();
+    }
+    
+    @Override
+    public List<Genre> findAll() {
+        return List.of();
     }
 }

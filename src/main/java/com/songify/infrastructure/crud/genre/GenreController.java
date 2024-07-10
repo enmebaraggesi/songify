@@ -1,10 +1,12 @@
 package com.songify.infrastructure.crud.genre;
 
 import com.songify.domain.crud.SongifyCrudFacade;
+import com.songify.domain.crud.dto.AllGenresResponseDto;
 import com.songify.domain.crud.dto.GenreDto;
 import com.songify.domain.crud.dto.GenreRequestDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,5 +23,11 @@ class GenreController {
     public ResponseEntity<GenreDto> createGenre(@RequestBody GenreRequestDto dto) {
         GenreDto genreDto = songifyCrudFacade.addGenre(dto);
         return ResponseEntity.ok(genreDto);
+    }
+    
+    @GetMapping
+    public ResponseEntity<AllGenresResponseDto> getGenres() {
+        AllGenresResponseDto allGenresDto = songifyCrudFacade.findAllGenres();
+        return ResponseEntity.ok(allGenresDto);
     }
 }
