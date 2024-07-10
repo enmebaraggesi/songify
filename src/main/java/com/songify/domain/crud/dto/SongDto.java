@@ -9,6 +9,7 @@ public record SongDto(Long id,
                       String name,
                       Instant releaseDate,
                       Long duration,
-                      String language) {
+                      String language,
+                      String genre) {
     
 }

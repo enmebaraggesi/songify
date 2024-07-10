@@ -15,6 +15,7 @@ import java.util.UUID;
 class ArtistAdder {
     
     private final ArtistRepository artistRepository;
+    private final GenreRetriever genreRetriever;
     
     ArtistDto addArtist(final String name) {
         Artist artist = new Artist(name);
@@ -38,7 +39,8 @@ class ArtistAdder {
         Song song = new Song(0L,
                              SongLanguage.OTHER,
                              "song: " + UUID.randomUUID(),
-                             Instant.now());
+                             Instant.now(),
+                             genreRetriever.findById(1L));
         album.addSong(song);
         
         album.addArtist(artist);

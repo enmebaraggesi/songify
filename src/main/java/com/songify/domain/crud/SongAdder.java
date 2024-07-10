@@ -11,13 +11,15 @@ import org.springframework.stereotype.Service;
 class SongAdder {
     
     private final SongRepository songRepository;
+    private final GenreRetriever genreRetriever;
     
     Song addSong(SongDtoForJson song) {
         log.info("adding new song: {}", song);
         Song songToSave = new Song(song.duration(),
                                    SongLanguage.valueOf(song.language().toUpperCase()),
                                    song.title(),
-                                   song.releaseDate());
+                                   song.releaseDate(),
+                                   genreRetriever.findById(1L));
         return songRepository.save(songToSave);
     }
 }

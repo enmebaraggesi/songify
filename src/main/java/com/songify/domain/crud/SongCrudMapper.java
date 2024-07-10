@@ -14,6 +14,7 @@ class SongCrudMapper {
                       .language(song.getLanguage().toString())
                       .duration(song.getDuration())
                       .releaseDate(song.getReleaseDate())
+                      .genre(song.getGenre().toString())
                       .build();
     }
     

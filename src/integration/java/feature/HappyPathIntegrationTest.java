@@ -15,7 +15,9 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,7 +53,24 @@ class HappyPathIntegrationTest {
 //        GetAllSongsResponseDto allSongsResponseDto = objectMapper.readValue(resultAsString, GetAllSongsResponseDto.class);
 //        assertThat(allSongsResponseDto.songs()).isEmpty();
 
-//      2. when I post to /song with Song "Till I Collapse" then Song "Till I Collapse" is returned with ID 1
+//      2. when I post to /songs with Song "Till I Collapse" then Song "Till I Collapse" is returned with ID 1
+        mvc.perform(post("/songs")
+                            .content(
+                                    """
+                                    {
+                                      "title": "till i collapse",
+                                      "language": "english",
+                                      "releaseDate": "2024-07-10T20:59:08.876Z",
+                                      "duration": 0
+                                    }
+                                    """
+                            )
+                            .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.song.id", is(1)))
+                .andExpect(jsonPath("$.song.title", is("till i collapse")))
+                .andExpect(jsonPath("$.song.duration", is(0)))
+                .andExpect(jsonPath("$.song.language", is("ENGLISH")));
 //      3. when I post to /song with Song "Lose Yourself" then Song "Lose Yourself" is returned with ID 2
 //      4. when I go to /genre then I can see no genres
 //      5. when I post to /genre with Genre "Rap" then Genre "Rap" is returned with ID 1
