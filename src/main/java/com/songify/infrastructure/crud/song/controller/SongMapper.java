@@ -1,10 +1,12 @@
 package com.songify.infrastructure.crud.song.controller;
 
+import com.songify.domain.crud.dto.GenreDto;
 import com.songify.domain.crud.dto.SongDto;
 import com.songify.infrastructure.crud.song.controller.dto.request.PatchSongRequestDto;
 import com.songify.infrastructure.crud.song.controller.dto.request.PostSongRequestDto;
 import com.songify.infrastructure.crud.song.controller.dto.request.UpdateSongRequestDto;
 import com.songify.infrastructure.crud.song.controller.dto.response.DeleteSongResponseDto;
+import com.songify.infrastructure.crud.song.controller.dto.response.FullSongDtoForJson;
 import com.songify.infrastructure.crud.song.controller.dto.response.GetAllSongsResponseDto;
 import com.songify.infrastructure.crud.song.controller.dto.response.GetSongResponseDto;
 import com.songify.infrastructure.crud.song.controller.dto.response.PatchSongResponseDto;
@@ -48,7 +50,7 @@ public class SongMapper {
         return new GetAllSongsResponseDto(responseDtoList);
     }
     
-    public static GetSongResponseDto mapSongDtoForJsonToGetSongResponseDto(SongDtoForJson song) {
+    public static GetSongResponseDto mapSongDtoForJsonToGetSongResponseDto(FullSongDtoForJson song) {
         return new GetSongResponseDto(song);
     }
     
@@ -74,5 +76,15 @@ public class SongMapper {
     
     public static PatchSongResponseDto mapPatchSongResponseDto(SongDtoForJson song) {
         return new PatchSongResponseDto("updated song " + song.title());
+    }
+    
+    static FullSongDtoForJson mapSongDtoToFullSongDtoForJson(final SongDto songById) {
+        return new FullSongDtoForJson(songById.id(),
+                                      songById.name(),
+                                      songById.language(),
+                                      songById.releaseDate(),
+                                      songById.duration(),
+                                      new GenreDto(songById.genre().id(),
+                                                   songById.genre().name()));
     }
 }

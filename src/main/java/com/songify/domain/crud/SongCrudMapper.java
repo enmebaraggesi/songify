@@ -1,5 +1,6 @@
 package com.songify.domain.crud;
 
+import com.songify.domain.crud.dto.GenreDto;
 import com.songify.domain.crud.dto.SongDto;
 import com.songify.infrastructure.crud.song.controller.dto.response.SongDtoForJson;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,8 @@ class SongCrudMapper {
                       .language(song.getLanguage().toString())
                       .duration(song.getDuration())
                       .releaseDate(song.getReleaseDate())
-                      .genre(song.getGenre().toString())
+                      .genre(new GenreDto(song.getGenre().getId(),
+                                          song.getGenre().getName()))
                       .build();
     }
     

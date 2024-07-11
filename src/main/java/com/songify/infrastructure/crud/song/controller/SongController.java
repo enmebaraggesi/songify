@@ -6,6 +6,7 @@ import com.songify.infrastructure.crud.song.controller.dto.request.PatchSongRequ
 import com.songify.infrastructure.crud.song.controller.dto.request.PostSongRequestDto;
 import com.songify.infrastructure.crud.song.controller.dto.request.UpdateSongRequestDto;
 import com.songify.infrastructure.crud.song.controller.dto.response.DeleteSongResponseDto;
+import com.songify.infrastructure.crud.song.controller.dto.response.FullSongDtoForJson;
 import com.songify.infrastructure.crud.song.controller.dto.response.GetAllSongsResponseDto;
 import com.songify.infrastructure.crud.song.controller.dto.response.GetSongResponseDto;
 import com.songify.infrastructure.crud.song.controller.dto.response.PatchSongResponseDto;
@@ -60,7 +61,7 @@ public class SongController {
     public ResponseEntity<GetSongResponseDto> getSongByID(@PathVariable Long id,
                                                           @RequestHeader(required = false) String requestId) {
         log.info("requestId: {}", requestId);
-        SongDtoForJson song = mapSongDtoToSongDtoForJson(songifyCrudFacade.findSongById(id));
+        FullSongDtoForJson song = SongMapper.mapSongDtoToFullSongDtoForJson(songifyCrudFacade.findSongById(id));
         return ResponseEntity.ok(mapSongDtoForJsonToGetSongResponseDto(song));
     }
     

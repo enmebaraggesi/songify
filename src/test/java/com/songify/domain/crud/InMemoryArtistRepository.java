@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 class InMemoryArtistRepository implements ArtistRepository {
     
     Map<Long, Artist> artists = new HashMap<>();
-    AtomicInteger index = new AtomicInteger(0);
+    AtomicInteger index = new AtomicInteger(1);
     
     @Override
     public Set<Artist> findAll(final Pageable pageable) {

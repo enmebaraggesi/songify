@@ -10,6 +10,6 @@ public record SongDto(Long id,
                       Instant releaseDate,
                       Long duration,
                       String language,
-                      String genre) {
+                      GenreDto genre) {
     
 }

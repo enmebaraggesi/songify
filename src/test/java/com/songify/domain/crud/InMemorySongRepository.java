@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 class InMemorySongRepository implements SongRepository {
     
     Map<Long, Song> songs = new HashMap<>();
-    AtomicInteger index = new AtomicInteger(0);
+    AtomicInteger index = new AtomicInteger(1);
     
     @Override
     public Song save(final Song song) {

@@ -46,9 +46,27 @@ class SongifyCrudFacadeTest {
         assertThat(songifyCrudFacade.findAllSongs(Pageable.unpaged()).size()).isEqualTo(1);
         assertThat(songifyCrudFacade.findAllSongs(Pageable.unpaged()))
                 .extracting(SongDto::id)
-                .containsExactly(0L);
+                .containsExactly(1L);
         assertThat(addedSong.name()).isEqualTo("testSong");
         assertThat(addedSong.language()).isEqualTo("ENGLISH");
+    }
+    
+    @Test
+    @DisplayName("should return song with default genre")
+    public void should_return_song_with_default_genre() {
+        //given
+        SongDtoForJson song = SongDtoForJson.builder()
+                                            .title("testSong")
+                                            .language("english")
+                                            .build();
+        Long songId = songifyCrudFacade.addSong(song).id();
+        assertThat(songifyCrudFacade.findAllSongs(Pageable.unpaged())).hasSize(1);
+        //when
+        SongDto result = songifyCrudFacade.findSongById(songId);
+        //then
+        assertThat(result.name()).isEqualTo("testSong");
+        assertThat(result.genre().id()).isEqualTo(1L);
+        assertThat(result.genre().name()).isEqualTo("default");
     }
     
     @Test
@@ -57,10 +75,10 @@ class SongifyCrudFacadeTest {
         //given
         assertThat(songifyCrudFacade.findAllSongs(Pageable.unpaged())).isEmpty();
         //when
-        Throwable throwable = catchThrowable(() -> songifyCrudFacade.findSongById(0L));
+        Throwable throwable = catchThrowable(() -> songifyCrudFacade.findSongById(1L));
         //then
         assertThat(throwable).isInstanceOf(SongNotFoundException.class);
-        assertThat(throwable.getMessage()).isEqualTo("cannot find song with id 0");
+        assertThat(throwable.getMessage()).isEqualTo("cannot find song with id 1");
     }
     
     @Test
@@ -77,7 +95,7 @@ class SongifyCrudFacadeTest {
         //then
         Set<ArtistDto> artistsCollectionAfterSave = songifyCrudFacade.findAllArtists(Pageable.unpaged());
         assertEquals(1, artistsCollectionAfterSave.size());
-        assertThat(result.id()).isEqualTo(0L);
+        assertThat(result.id()).isEqualTo(1L);
         assertThat(result.name()).isEqualTo("testArtist");
     }
     
@@ -87,10 +105,10 @@ class SongifyCrudFacadeTest {
         //given
         assertThat(songifyCrudFacade.findAllArtists(Pageable.unpaged())).isEmpty();
         //when
-        Throwable throwable = catchThrowable(() -> songifyCrudFacade.deleteArtistByIdWithAlbumsAndSongs(0L));
+        Throwable throwable = catchThrowable(() -> songifyCrudFacade.deleteArtistByIdWithAlbumsAndSongs(1L));
         //then
         assertThat(throwable).isInstanceOf(ArtistNotFoundException.class);
-        assertThat(throwable.getMessage()).isEqualTo("Artist with ID 0 not found");
+        assertThat(throwable.getMessage()).isEqualTo("Artist with ID 1 not found");
     }
     
     @Test
@@ -243,7 +261,7 @@ class SongifyCrudFacadeTest {
         //then
         assertThat(songifyCrudFacade.findAllAlbums(Pageable.unpaged()).size()).isEqualTo(1);
         AlbumInfo albumWithSongs = songifyCrudFacade.findAlbumByIdWithArtistsAndSongs(addedAlbum.id());
-        assertThat(albumWithSongs.getId()).isEqualTo(0L);
+        assertThat(albumWithSongs.getId()).isEqualTo(1L);
         assertThat(albumWithSongs.getTitle()).isEqualTo("testAlbum");
         Set<AlbumInfo.SongInfo> songs = albumWithSongs.getSongs();
         assertTrue(songs.stream().anyMatch(songInfo -> songInfo.getId().equals(song.id())));
@@ -255,7 +273,7 @@ class SongifyCrudFacadeTest {
         //given
         assertThat(songifyCrudFacade.findAllAlbums(Pageable.unpaged())).isEmpty();
         //when
-        Throwable throwable = catchThrowable(() -> songifyCrudFacade.findAlbumByIdWithArtistsAndSongs(0L));
+        Throwable throwable = catchThrowable(() -> songifyCrudFacade.findAlbumByIdWithArtistsAndSongs(1L));
         //then
         assertThat(throwable).isInstanceOf(AlbumNotFoundException.class);
         assertThat(throwable.getMessage()).isEqualTo("Album not found");
