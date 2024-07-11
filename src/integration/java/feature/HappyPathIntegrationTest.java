@@ -14,6 +14,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -171,5 +172,10 @@ class HappyPathIntegrationTest {
            .andExpect(jsonPath("$.id", is(1)))
            .andExpect(jsonPath("$.artists[0].id", is(1)))
            .andExpect(jsonPath("$.songs[0].id", is(1)));
+//      15. when I put to /albums/1/songs/2 then Song with ID 2 is added to Album with ID 1
+        mvc.perform(put("/albums/1/songs/2").contentType(MediaType.APPLICATION_JSON))
+           .andExpect(status().isOk())
+           .andExpect(jsonPath("$.id", is(1)))
+           .andExpect(jsonPath("$.songs[*].id", containsInAnyOrder(1, 2)));
     }
 }

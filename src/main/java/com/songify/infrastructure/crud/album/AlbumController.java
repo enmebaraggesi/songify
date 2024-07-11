@@ -49,4 +49,11 @@ class AlbumController {
         AlbumDto albumDto = songifyCrudFacade.addArtistToAlbum(artistId, albumId);
         return ResponseEntity.ok(albumDto);
     }
+    
+    @PutMapping("{albumId}/songs/{songId}")
+    ResponseEntity<AlbumDto> updateAlbumWithSong(@PathVariable Long albumId,
+                                                 @PathVariable Long songId) {
+        AlbumDto albumDto = songifyCrudFacade.addSongToAlbum(albumId, songId);
+        return ResponseEntity.ok(albumDto);
+    }
 }

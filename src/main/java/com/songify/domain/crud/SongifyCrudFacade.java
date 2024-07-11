@@ -147,4 +147,28 @@ public class SongifyCrudFacade {
         song.setGenre(genre);
         return new UpdateSongResponseDto("updated song with genre: " + genre.getName());
     }
+    
+    @Transactional
+    public AlbumDto addSongToAlbum(final Long albumId, final Long songId) {
+        Song song = songRetriever.findById(songId);
+        Album album = albumRetriever.findById(albumId);
+        album.addSong(song);
+        song.setAlbum(album);
+        return new AlbumDto(album.getId(),
+                            album.getTitle(),
+                            album.getArtists()
+                                 .stream()
+                                 .map(artist -> new ArtistDto(artist.getId(), artist.getName()))
+                                 .collect(Collectors.toSet()),
+                            album.getSongs()
+                                 .stream()
+                                 .map(song1 -> new SongDto(song1.getId(),
+                                                           song1.getName(),
+                                                           song1.getReleaseDate(),
+                                                           song1.getDuration(),
+                                                           song1.getLanguage().toString(),
+                                                           new GenreDto(song1.getGenre().getId(),
+                                                                        song1.getGenre().getName())))
+                                 .collect(Collectors.toSet()));
+    }
 }
