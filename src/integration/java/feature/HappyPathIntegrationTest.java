@@ -16,6 +16,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -177,5 +178,11 @@ class HappyPathIntegrationTest {
            .andExpect(status().isOk())
            .andExpect(jsonPath("$.id", is(1)))
            .andExpect(jsonPath("$.songs[*].id", containsInAnyOrder(1, 2)));
+//      16. when I go to /albums/1 then I can see Album ID 1 with two Songs and Eminem as Artist
+        mvc.perform(get("/albums/1").contentType(MediaType.APPLICATION_JSON))
+           .andExpect(status().isOk())
+           .andExpect(jsonPath("$.id", is(1)))
+           .andExpect(jsonPath("$.songs", hasSize(2)))
+           .andExpect(jsonPath("$.artists[*].name", containsInAnyOrder("Eminem")));
     }
 }
