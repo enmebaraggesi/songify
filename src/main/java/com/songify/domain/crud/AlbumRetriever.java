@@ -2,6 +2,9 @@ package com.songify.domain.crud;
 
 import com.songify.domain.crud.dto.AlbumDto;
 import com.songify.domain.crud.dto.AlbumInfo;
+import com.songify.domain.crud.dto.ArtistDto;
+import com.songify.domain.crud.dto.GenreDto;
+import com.songify.domain.crud.dto.SongDto;
 import com.songify.infrastructure.crud.album.error.AlbumNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -55,14 +58,44 @@ class AlbumRetriever {
     Set<AlbumDto> findAllAlbumsDtoByArtistId(final Long id) {
         Set<Album> albumsByArtistId = findAllAlbumsByArtistId(id);
         return albumsByArtistId.stream()
-                               .map(album -> new AlbumDto(album.getId(), album.getTitle()))
+                               .map(album -> new AlbumDto(album.getId(),
+                                                          album.getTitle(),
+                                                          album.getArtists()
+                                                               .stream()
+                                                               .map(artist -> new ArtistDto(artist.getId(), artist.getName()))
+                                                               .collect(Collectors.toSet()),
+                                                          album.getSongs()
+                                                               .stream()
+                                                               .map(song -> new SongDto(song.getId(),
+                                                                                        song.getName(),
+                                                                                        song.getReleaseDate(),
+                                                                                        song.getDuration(),
+                                                                                        song.getLanguage().toString(),
+                                                                                        new GenreDto(song.getGenre().getId(),
+                                                                                                     song.getGenre().getName())))
+                                                               .collect(Collectors.toSet())))
                                .collect(Collectors.toSet());
     }
     
     Set<AlbumDto> findAllAlbums(final Pageable pageable) {
         Set<Album> allAlbums = albumRepository.findAll(pageable);
         return allAlbums.stream()
-                        .map(album -> new AlbumDto(album.getId(), album.getTitle()))
+                        .map(album -> new AlbumDto(album.getId(),
+                                                   album.getTitle(),
+                                                   album.getArtists()
+                                                        .stream()
+                                                        .map(artist -> new ArtistDto(artist.getId(), artist.getName()))
+                                                        .collect(Collectors.toSet()),
+                                                   album.getSongs()
+                                                        .stream()
+                                                        .map(song -> new SongDto(song.getId(),
+                                                                                 song.getName(),
+                                                                                 song.getReleaseDate(),
+                                                                                 song.getDuration(),
+                                                                                 song.getLanguage().toString(),
+                                                                                 new GenreDto(song.getGenre().getId(),
+                                                                                              song.getGenre().getName())))
+                                                        .collect(Collectors.toSet())))
                         .collect(Collectors.toSet());
     }
     

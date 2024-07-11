@@ -126,12 +126,30 @@ class HappyPathIntegrationTest {
         mvc.perform(get("/albums").contentType(MediaType.APPLICATION_JSON))
            .andExpect(status().isOk())
            .andExpect(jsonPath("$.albums", empty()));
-//      10. when I post to /albums with Album "EminemAlbum1" and Song with ID 1 then Album "EminemAlbum1" is returned with ID 1
-//      11. when I go to /albums/1 then I can see song with ID 1 added to album
-//      12. when I put to /albums/1/song/1 then Song with ID 1 ("Till I Collapse") is added to Album with ID 1 ("EminemAlbum1")
-//      13. when I put to /albums/1/song/2 then Song with ID 2 ("Lose Yourself") is added to Album with ID 1 ("EminemAlbum1")
-//      14. when I go to /albums/1/song then I can see 2 songs (id1, id2)
-//      15. when I post to /artists with Artist "Eminem" then Artist "Eminem" is returned with ID 1
-//      16. when I put to /albums/1/artists/1 then Artist with ID 1 ("Eminem") is added to Album with ID 1 ("EminemAlbum1")
+//      10. when I post to /albums with Album "EminemAlbum1" and Song ID 1 then Album "EminemAlbum1" is returned with ID 1
+        mvc.perform(post("/albums")
+                            .content(
+                                    """
+                                    {
+                                      "title": "EminemAlbum1",
+                                      "releaseDate": "2024-07-11T12:54:10.610Z",
+                                      "songId": 1
+                                    }
+                                    """.trim()
+                            )
+                            .contentType(MediaType.APPLICATION_JSON))
+           .andExpect(status().isOk())
+           .andExpect(jsonPath("$.id", is(1)))
+           .andExpect(jsonPath("$.name", is("EminemAlbum1")))
+           .andExpect(jsonPath("$.songs[0].id", is(1)));
+//      11. when I go to /albums/1 while no Artist is added to Album then error "Album not found" is returned
+        mvc.perform(get("/albums/1").contentType(MediaType.APPLICATION_JSON))
+           .andExpect(status().isNotFound())
+           .andExpect(jsonPath("$.status", is("NOT_FOUND")))
+           .andExpect(jsonPath("$.message", is("Album not found")));
+//      12. when I put to /albums/1/song/2 then Song with ID 2 ("Lose Yourself") is added to Album with ID 1 ("EminemAlbum1")
+//      13. when I go to /albums/1/song then I can see 2 songs (id1, id2)
+//      14. when I post to /artists with Artist "Eminem" then Artist "Eminem" is returned with ID 1
+//      15. when I put to /albums/1/artists/1 then Artist with ID 1 ("Eminem") is added to Album with ID 1 ("EminemAlbum1")
     }
 }

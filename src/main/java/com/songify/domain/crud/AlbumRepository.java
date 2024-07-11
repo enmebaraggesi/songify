@@ -13,10 +13,11 @@ import java.util.Set;
 interface AlbumRepository extends Repository<Album, Integer> {
 
 //    Optional<Album> findById(Long id);
-
-//    @Query("select a from Album a join fetch a.artists artists join fetch a.songs songs where a.id = :id")
+    
+    //    @Query("select a from Album a join fetch a.artists artists join fetch a.songs songs where a.id = :id")
 //    Optional<Album> findByIdWithArtistsAndSongs(Long id);
     
+    @Query("select a from Album a join fetch a.artists artists join fetch a.songs songs where a.id = :id")
     Optional<AlbumInfo> findById(Long id);
     
     @Query("select a from Album a where a.id = :id")
