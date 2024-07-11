@@ -118,14 +118,17 @@ class HappyPathIntegrationTest {
            .andExpect(status().isOk())
            .andExpect(jsonPath("$.info", is("updated song with genre: Rap")));
 //      8. when I go to /songs/1 then I can see "Rap" genre
-//      9. when I put to /songs/2/genre/1 then Genre with ID 1 ("Rap") is added to Song with ID 2 ("Lose Yourself")
-//      10. when I go to /albums then I see no albums
-//      11. when I post to /albums with Album "EminemAlbum1" and Song with ID 1 then Album "EminemAlbum1" is returned with ID 1
-//      12. when I go to /albums/1 then I can see song with ID 1 added to album
-//      13. when I put to /albums/1/song/1 then Song with ID 1 ("Till I Collapse") is added to Album with ID 1 ("EminemAlbum1")
-//      14. when I put to /albums/1/song/2 then Song with ID 2 ("Lose Yourself") is added to Album with ID 1 ("EminemAlbum1")
-//      15. when I go to /albums/1/song then I can see 2 songs (id1, id2)
-//      16. when I post to /artists with Artist "Eminem" then Artist "Eminem" is returned with ID 1
-//      17. when I put to /albums/1/artists/1 then Artist with ID 1 ("Eminem") is added to Album with ID 1 ("EminemAlbum1")
+        mvc.perform(get("/songs/1").contentType(MediaType.APPLICATION_JSON))
+           .andExpect(status().isOk())
+           .andExpect(jsonPath("$.song.genre.id", is(2)))
+           .andExpect(jsonPath("$.song.genre.name", is("Rap")));
+//      9. when I go to /albums then I see no albums
+//      10. when I post to /albums with Album "EminemAlbum1" and Song with ID 1 then Album "EminemAlbum1" is returned with ID 1
+//      11. when I go to /albums/1 then I can see song with ID 1 added to album
+//      12. when I put to /albums/1/song/1 then Song with ID 1 ("Till I Collapse") is added to Album with ID 1 ("EminemAlbum1")
+//      13. when I put to /albums/1/song/2 then Song with ID 2 ("Lose Yourself") is added to Album with ID 1 ("EminemAlbum1")
+//      14. when I go to /albums/1/song then I can see 2 songs (id1, id2)
+//      15. when I post to /artists with Artist "Eminem" then Artist "Eminem" is returned with ID 1
+//      16. when I put to /albums/1/artists/1 then Artist with ID 1 ("Eminem") is added to Album with ID 1 ("EminemAlbum1")
     }
 }
