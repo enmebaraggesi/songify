@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.songify.domain.crud.SongCrudMapper.mapSongDtoForJsonToSongDto;
 import static com.songify.domain.crud.SongCrudMapper.mapSongToSongDto;
@@ -49,8 +50,24 @@ public class SongifyCrudFacade {
         return artistAdder.addArtist(dto.name());
     }
     
-    public void addArtistToAlbum(Long artistId, Long albumId) {
-        artistAssigner.addArtistToAlbum(artistId, albumId);
+    public AlbumDto addArtistToAlbum(Long artistId, Long albumId) {
+        Album album = artistAssigner.addArtistToAlbum(artistId, albumId);
+        return new AlbumDto(album.getId(),
+                            album.getTitle(),
+                            album.getArtists()
+                                 .stream()
+                                 .map(artist -> new ArtistDto(artist.getId(), artist.getName()))
+                                 .collect(Collectors.toSet()),
+                            album.getSongs()
+                                 .stream()
+                                 .map(song -> new SongDto(song.getId(),
+                                                          song.getName(),
+                                                          song.getReleaseDate(),
+                                                          song.getDuration(),
+                                                          song.getLanguage().toString(),
+                                                          new GenreDto(song.getGenre().getId(),
+                                                                       song.getGenre().getName())))
+                                 .collect(Collectors.toSet()));
     }
     
     public ArtistDto addArtistWithDefaultAlbumAndSong(ArtistRequestDto dto) {

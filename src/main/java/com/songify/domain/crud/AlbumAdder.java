@@ -26,6 +26,7 @@ class AlbumAdder {
         album.setTitle(title);
         album.setReleaseDate(releaseDate);
         album.addSong(song);
+        song.setAlbum(album);
         Album saved = albumRepository.save(album);
         Set<ArtistDto> artistDtos = saved.getArtists()
                                          .stream()

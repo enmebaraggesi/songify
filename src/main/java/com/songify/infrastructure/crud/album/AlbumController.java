@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,5 +41,12 @@ class AlbumController {
     ResponseEntity<GetAllAlbumsResponseDto> getAlbums(Pageable pageable) {
         Set<AlbumDto> allAlbums = songifyCrudFacade.findAllAlbums(pageable);
         return ResponseEntity.ok(new GetAllAlbumsResponseDto(allAlbums));
+    }
+    
+    @PutMapping("{albumId}/artists/{artistId}")
+    ResponseEntity<AlbumDto> updateAlbumWithArtist(@PathVariable Long albumId,
+                                                   @PathVariable Long artistId) {
+        AlbumDto albumDto = songifyCrudFacade.addArtistToAlbum(artistId, albumId);
+        return ResponseEntity.ok(albumDto);
     }
 }

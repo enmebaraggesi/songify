@@ -12,10 +12,11 @@ class ArtistAssigner {
     private final AlbumRetriever albumRetriever;
     
     @Transactional
-    void addArtistToAlbum(final Long artistId, final Long albumId) {
+    Album addArtistToAlbum(final Long artistId, final Long albumId) {
         Artist artist = artistRetriever.findById(artistId);
         Album album = albumRetriever.findById(albumId);
         artist.addAlbum(album);
         album.addArtist(artist);
+        return album;
     }
 }
