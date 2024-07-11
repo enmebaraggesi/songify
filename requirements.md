@@ -24,6 +24,20 @@ SONGIFY: APLIKACJA DO ZARZĄDZANIA PIOSENKAMI, ARTYSTAMI I ALBUMAMI
 22. można wyświetlać konkretne gatunki z piosenkami
 23. można wyświetlać konkretnych artystów z albumami
 
+**SECURITY**
+1. Każdy bez uwierzytelniania może przeglądać piosenki, albumy itp. (gość niezalogowany)
+2. Istnieją dwie role: ROLE_USER i ROLE_ADMIN
+3. Używanie bezstanowego tokena JWT (uzyskiwany po zalogowaniu) - własna implementacja authorization i oauth google
+4. Tylko admin może przejrzeć loginy i role użytkowników — endpoint /users
+5. żeby zostać userem, trzeba się zarejestrować przez login i hasło — własna implementacja i google
+6. zapisujemy użytkownika i admina do bazy danych (w przypadku własnej impl) - admin tworzony w migracji flyway
+7. użytkownik może wyświetlać piosenki, ale nie może zarządzać (w przyszłości może mieć swój profil i ulubione piosenki)
+8. tylko admin może zmieniać stan aplikacji (crud)
+9. chcemy mieć szyfrowanie HTTPS, certyfikat wygenerowany ręcznie openssl
+10. chcemy mieć obsługę CORS — zapytania z domeny frontendowej
+11. chcemy zabezpieczenie CSRF
+12. potwierdzenie e-maila po rejestracji
+
 HAPPY PATH (user tworzy album "Eminema" z piosenkami "Till I Collapse", "Lose Yourself" o gatunku "Rap")
 given there is no songs, artists, albums and genres created before
 1. when I go to /song then I can see no songs
