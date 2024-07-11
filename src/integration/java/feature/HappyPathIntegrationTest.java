@@ -123,6 +123,9 @@ class HappyPathIntegrationTest {
            .andExpect(jsonPath("$.song.genre.id", is(2)))
            .andExpect(jsonPath("$.song.genre.name", is("Rap")));
 //      9. when I go to /albums then I see no albums
+        mvc.perform(get("/albums").contentType(MediaType.APPLICATION_JSON))
+           .andExpect(status().isOk())
+           .andExpect(jsonPath("$.albums", empty()));
 //      10. when I post to /albums with Album "EminemAlbum1" and Song with ID 1 then Album "EminemAlbum1" is returned with ID 1
 //      11. when I go to /albums/1 then I can see song with ID 1 added to album
 //      12. when I put to /albums/1/song/1 then Song with ID 1 ("Till I Collapse") is added to Album with ID 1 ("EminemAlbum1")
