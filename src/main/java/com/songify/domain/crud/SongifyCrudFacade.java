@@ -10,6 +10,8 @@ import com.songify.domain.crud.dto.GenreDto;
 import com.songify.domain.crud.dto.GenreRequestDto;
 import com.songify.domain.crud.dto.SongDto;
 import com.songify.infrastructure.crud.song.controller.dto.response.SongDtoForJson;
+import com.songify.infrastructure.crud.song.controller.dto.response.UpdateSongResponseDto;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -119,5 +121,13 @@ public class SongifyCrudFacade {
     public AllGenresResponseDto findAllGenres() {
         List<GenreDto> genreDtos = genreRetriever.findAll();
         return new AllGenresResponseDto(genreDtos);
+    }
+    
+    @Transactional
+    public UpdateSongResponseDto assignGenreToSong(final Long songId, final Long genreId) {
+        Song song = songRetriever.findById(songId);
+        Genre genre = genreRetriever.findById(genreId);
+        song.setGenre(genre);
+        return new UpdateSongResponseDto("updated song with genre: " + genre.getName());
     }
 }

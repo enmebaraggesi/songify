@@ -87,6 +87,13 @@ public class SongController {
         return ResponseEntity.ok(mapSongDtoForJsonToUpdateSongResponseDto(newSong));
     }
     
+    @PutMapping("{songId}/genres/{genreId}")
+    public ResponseEntity<UpdateSongResponseDto> updateSongGenreById(@PathVariable Long songId,
+                                                                     @PathVariable Long genreId) {
+        UpdateSongResponseDto responseDto = songifyCrudFacade.assignGenreToSong(songId, genreId);
+        return ResponseEntity.ok(responseDto);
+    }
+    
     @PatchMapping("{id}")
     public ResponseEntity<PatchSongResponseDto> patchSongById(@PathVariable Long id,
                                                               @RequestBody PatchSongRequestDto requestDto) {
