@@ -40,10 +40,10 @@ public class User extends BaseEntity {
     
     private Collection<String> authorities = new HashSet<>();
     
-    public User(final Collection<String> authorities, final String email, final boolean enabled, final String password) {
-        this.authorities = authorities;
+    public User(final String email, final String password, final boolean enabled, final Collection<String> authorities) {
         this.email = email;
-        this.enabled = enabled;
         this.password = password;
+        this.enabled = enabled;
+        this.authorities = authorities;
     }
 }
