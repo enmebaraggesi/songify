@@ -4,11 +4,11 @@ import org.springframework.data.repository.Repository;
 
 import java.util.Optional;
 
-interface UserRepository extends Repository<User, Long> {
-
-    Optional<User> findByEmail(String email);
+public interface UserRepository extends Repository<User, Long> {
     
     User save(User user);
     
     boolean existsByEmail(String email);
+    
+    Optional<User> findFirstByEmail(String username);
 }

@@ -15,13 +15,12 @@ import lombok.Setter;
 import java.util.Collection;
 import java.util.HashSet;
 
-@SuppressWarnings("JpaAttributeTypeInspection")
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
-class User extends BaseEntity {
+public class User extends BaseEntity {
     
     @Id
     @GeneratedValue(generator = "user_id_seq", strategy = GenerationType.SEQUENCE)
