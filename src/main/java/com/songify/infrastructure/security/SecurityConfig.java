@@ -30,7 +30,12 @@ class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable); // pozwalamy wysyłać żądania spoza serwera
         http.formLogin(Customizer.withDefaults()); // nadpisując SecurityFilterChain trzeba na nowo włączyć defaultowe filtry
         http.httpBasic(Customizer.withDefaults());
-        http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated()); // zapytania można robić już tylko za pomocą uprzedniego logowania
+        http.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/users/register").permitAll() // najpierw: pozwalam robić zapytanie o rejestrację użytkownika bez autoryzacji
+                .requestMatchers("/swagger-ui/**").permitAll() // potem: pozwalam wchodzić na api swaggera bez autoryzacji
+                .requestMatchers("/swagger-resources/**").permitAll()
+                .requestMatchers("/v3/api-docs/**").permitAll()
+                .anyRequest().authenticated()); // finalnie: zapytania można robić już tylko za pomocą uprzedniego logowania
         return http.build();
     }
 }
