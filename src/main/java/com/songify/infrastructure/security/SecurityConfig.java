@@ -30,6 +30,7 @@ class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable); // pozwalamy wysyłać żądania spoza serwera
         http.formLogin(Customizer.withDefaults()); // nadpisując SecurityFilterChain trzeba na nowo włączyć defaultowe filtry
         http.httpBasic(Customizer.withDefaults());
+        http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated()); // zapytania można robić już tylko za pomocą uprzedniego logowania
         return http.build();
     }
 }
