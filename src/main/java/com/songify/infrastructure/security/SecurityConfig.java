@@ -8,6 +8,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
@@ -33,10 +34,11 @@ class SecurityConfig {
     
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable); // pozwalamy wysyłać żądania spoza serwera
+        http.csrf(AbstractHttpConfigurer::disable); // pozwalamy wysyłać żądania bez csrf
         http.cors(corsConfigurerCustomizer()); // ustawiamy, która domena może się dostać do serwera
-        http.formLogin(Customizer.withDefaults()); // nadpisując SecurityFilterChain trzeba na nowo włączyć defaultowe filtry
-        http.httpBasic(Customizer.withDefaults());
+        http.formLogin(AbstractHttpConfigurer::disable); // pozwalamy wysyłać żądania bez form login
+        http.httpBasic(AbstractHttpConfigurer::disable); // pozwalamy wysyłać żądania bez basic auth
+        http.sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // wyłączamy sesyjność połączeń
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/users/register").permitAll() // najpierw: pozwalam robić zapytanie o rejestrację użytkownika bez autoryzacji
                 .requestMatchers("/swagger-ui/**").permitAll() // potem: pozwalam wchodzić na api swaggera bez autoryzacji
@@ -71,11 +73,11 @@ class SecurityConfig {
             CorsConfigurationSource source = request -> {
                 CorsConfiguration corsConfiguration = new CorsConfiguration();
                 corsConfiguration.setAllowedOrigins(
-                        List.of("http://localhost:3000"));
+                        List.of("http://localhost:3000")); // pozwala frontendowi na porcie 3000 wysyłać żądania
                 corsConfiguration.setAllowedMethods(
-                        List.of("GET", "POST", "PUT", "DELETE"));
+                        List.of("GET", "POST", "PUT", "DELETE")); // jakie żądania są obsługiwane
                 corsConfiguration.setAllowedHeaders(
-                        List.of("*"));
+                        List.of("*")); // dowolne headery są dozwolone
                 return corsConfiguration;
             };
             c.configurationSource(source);
