@@ -44,6 +44,7 @@ class SecurityConfig {
                 .requestMatchers("/swagger-ui/**").permitAll() // potem: pozwalam wchodzić na api swaggera bez autoryzacji
                 .requestMatchers("/swagger-resources/**").permitAll()
                 .requestMatchers("/v3/api-docs/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/token/**").permitAll() // potem: pozwalam bez uprzedniego bycia zalogowanym uzyskiwać token (podczas logowania, więc użytkownik nie był jeszcze zalogowany)
                 .requestMatchers(HttpMethod.GET, "/songs/**").permitAll() // potem: pozwalam wyświetlać dane zapisane w bazie danych
                 .requestMatchers(HttpMethod.GET, "/artists/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/albums/**").permitAll()
