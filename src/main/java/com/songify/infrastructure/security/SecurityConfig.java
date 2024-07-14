@@ -7,10 +7,15 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 class SecurityConfig {
@@ -29,6 +34,7 @@ class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable); // pozwalamy wysyłać żądania spoza serwera
+        http.cors(corsConfigurerCustomizer()); // ustawiamy, która domena może się dostać do serwera
         http.formLogin(Customizer.withDefaults()); // nadpisując SecurityFilterChain trzeba na nowo włączyć defaultowe filtry
         http.httpBasic(Customizer.withDefaults());
         http.authorizeHttpRequests(authorize -> authorize
@@ -58,5 +64,21 @@ class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/genres/**").hasRole("ADMIN")
                 .anyRequest().authenticated()); // finalnie: zapytania można robić już tylko za pomocą uprzedniego logowania
         return http.build();
+    }
+    
+    public Customizer<CorsConfigurer<HttpSecurity>> corsConfigurerCustomizer() {
+        return c -> {
+            CorsConfigurationSource source = request -> {
+                CorsConfiguration corsConfiguration = new CorsConfiguration();
+                corsConfiguration.setAllowedOrigins(
+                        List.of("http://localhost:3000"));
+                corsConfiguration.setAllowedMethods(
+                        List.of("GET", "POST", "PUT", "DELETE"));
+                corsConfiguration.setAllowedHeaders(
+                        List.of("*"));
+                return corsConfiguration;
+            };
+            c.configurationSource(source);
+        };
     }
 }
