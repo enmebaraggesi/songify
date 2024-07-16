@@ -1,7 +1,6 @@
 package com.songify.infrastructure.security;
 
 import com.songify.domain.usercrud.UserRepository;
-import com.songify.infrastructure.security.jwt.JwtAuthTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,7 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -42,19 +40,19 @@ class SecurityConfig {
     }
     
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthTokenFilter jwtAuthTokenFilter) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable); // pozwalamy wysyłać żądania bez csrf
         http.cors(corsConfigurerCustomizer()); // ustawiamy, która domena może się dostać do serwera
         http.formLogin(AbstractHttpConfigurer::disable); // pozwalamy wysyłać żądania bez form login
         http.httpBasic(AbstractHttpConfigurer::disable); // pozwalamy wysyłać żądania bez basic auth
         http.sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // wyłączamy sesyjność połączeń
-        http.addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class);
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/users/register").permitAll() // najpierw: pozwalam robić zapytanie o rejestrację użytkownika bez autoryzacji
                 .requestMatchers("/swagger-ui/**").permitAll() // potem: pozwalam wchodzić na api swaggera bez autoryzacji
                 .requestMatchers("/swagger-resources/**").permitAll()
                 .requestMatchers("/v3/api-docs/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/token/**").permitAll() // potem: pozwalam bez uprzedniego bycia zalogowanym uzyskiwać token (podczas logowania, więc użytkownik nie był jeszcze zalogowany)
+//                .requestMatchers(HttpMethod.POST, "/token/**").permitAll() // potem: pozwalam bez uprzedniego bycia zalogowanym uzyskiwać token (podczas logowania, więc użytkownik nie był jeszcze zalogowany)
                 .requestMatchers(HttpMethod.GET, "/songs/**").permitAll() // potem: pozwalam wyświetlać dane zapisane w bazie danych
                 .requestMatchers(HttpMethod.GET, "/artists/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/albums/**").permitAll()
