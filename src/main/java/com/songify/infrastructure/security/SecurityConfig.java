@@ -84,7 +84,7 @@ class SecurityConfig {
             CorsConfigurationSource source = request -> {
                 CorsConfiguration corsConfiguration = new CorsConfiguration();
                 corsConfiguration.setAllowedOrigins(
-                        List.of("http://localhost:3000")); // pozwala frontendowi na porcie 3000 wysyłać żądania
+                        List.of("https://localhost:3000")); // pozwala frontendowi na porcie 3000 wysyłać żądania
                 corsConfiguration.setAllowedMethods(
                         List.of("GET", "POST", "PUT", "DELETE")); // jakie żądania są obsługiwane
                 corsConfiguration.setAllowedHeaders(
