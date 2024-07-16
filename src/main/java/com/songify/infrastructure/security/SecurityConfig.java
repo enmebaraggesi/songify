@@ -89,6 +89,7 @@ class SecurityConfig {
                         List.of("GET", "POST", "PUT", "DELETE")); // jakie żądania są obsługiwane
                 corsConfiguration.setAllowedHeaders(
                         List.of("*")); // dowolne headery są dozwolone
+                corsConfiguration.setAllowCredentials(true);
                 return corsConfiguration;
             };
             c.configurationSource(source);
