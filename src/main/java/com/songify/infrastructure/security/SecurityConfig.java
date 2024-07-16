@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
@@ -45,7 +44,8 @@ class SecurityConfig {
         http.cors(corsConfigurerCustomizer()); // ustawiamy, która domena może się dostać do serwera
         http.formLogin(AbstractHttpConfigurer::disable); // pozwalamy wysyłać żądania bez form login
         http.httpBasic(AbstractHttpConfigurer::disable); // pozwalamy wysyłać żądania bez basic auth
-        http.sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // wyłączamy sesyjność połączeń
+        http.oauth2Login(Customizer.withDefaults());
+//        http.sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // wyłączamy sesyjność połączeń
 //        http.addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class);
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/users/register").permitAll() // najpierw: pozwalam robić zapytanie o rejestrację użytkownika bez autoryzacji
@@ -57,6 +57,7 @@ class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/artists/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/albums/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/genres/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/").permitAll()
                 .requestMatchers(HttpMethod.POST, "/songs/**").hasRole("ADMIN") // potem: pozwalam modyfikować dane tylko adminowi
                 .requestMatchers(HttpMethod.PATCH, "/songs/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/songs/**").hasRole("ADMIN")
