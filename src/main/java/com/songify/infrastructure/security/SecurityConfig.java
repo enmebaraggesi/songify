@@ -1,6 +1,7 @@
 package com.songify.infrastructure.security;
 
 import com.songify.domain.usercrud.UserRepository;
+import com.songify.infrastructure.security.jwt.JwtAuthTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -40,12 +42,13 @@ class SecurityConfig {
     }
     
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthTokenFilter jwtAuthTokenFilter) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable); // pozwalamy wysyłać żądania bez csrf
         http.cors(corsConfigurerCustomizer()); // ustawiamy, która domena może się dostać do serwera
         http.formLogin(AbstractHttpConfigurer::disable); // pozwalamy wysyłać żądania bez form login
         http.httpBasic(AbstractHttpConfigurer::disable); // pozwalamy wysyłać żądania bez basic auth
         http.sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // wyłączamy sesyjność połączeń
+        http.addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class);
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/users/register").permitAll() // najpierw: pozwalam robić zapytanie o rejestrację użytkownika bez autoryzacji
                 .requestMatchers("/swagger-ui/**").permitAll() // potem: pozwalam wchodzić na api swaggera bez autoryzacji
