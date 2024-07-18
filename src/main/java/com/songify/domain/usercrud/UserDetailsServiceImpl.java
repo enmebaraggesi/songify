@@ -1,7 +1,5 @@
-package com.songify.infrastructure.security;
+package com.songify.domain.usercrud;
 
-import com.songify.domain.usercrud.User;
-import com.songify.domain.usercrud.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,15 +8,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 
 import java.util.List;
+import java.util.UUID;
 
 @Log4j2
 @AllArgsConstructor
-class UserDetailsServiceImpl implements UserDetailsManager {
+public class UserDetailsServiceImpl implements UserDetailsManager {
     
     public static final String DEFAULT_USER_ROLE = "ROLE_USER";
     
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserConfirmer userConfirmer;
     
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
@@ -35,11 +35,11 @@ class UserDetailsServiceImpl implements UserDetailsManager {
         }
         User createdUser = new User(user.getUsername(),
                                     passwordEncoder.encode(user.getPassword()),
-                                    true,
+                                    UUID.randomUUID().toString(),
                                     List.of(DEFAULT_USER_ROLE));
         User savedUser = userRepository.save(createdUser);
         log.info("user created with id {}", savedUser.getId());
-        // send email confirmation
+        userConfirmer.sendConfirmationEmail(createdUser);
     }
     
     @Override

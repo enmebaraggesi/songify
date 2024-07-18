@@ -2,7 +2,7 @@
 //
 //import com.auth0.jwt.JWT;
 //import com.auth0.jwt.algorithms.Algorithm;
-//import com.songify.infrastructure.security.SecurityUser;
+//import com.songify.domain.usercrud.SecurityUser;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.security.authentication.AuthenticationManager;
 //import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

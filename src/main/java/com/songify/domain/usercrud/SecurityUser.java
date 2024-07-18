@@ -1,6 +1,5 @@
-package com.songify.infrastructure.security;
+package com.songify.domain.usercrud;
 
-import com.songify.domain.usercrud.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
